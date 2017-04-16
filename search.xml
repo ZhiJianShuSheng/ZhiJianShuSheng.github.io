@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+    
+    <entry>
+      <title><![CDATA[iOS音频相关基础整理及参考文章整理]]></title>
+      <url>http://yoursite.com/2017/04/16/2017/4/iOS%E9%9F%B3%E9%A2%91%E7%9B%B8%E5%85%B3%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86%E5%8F%8A%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%E6%95%B4%E7%90%86/</url>
+      <content type="html"><![CDATA[<p>来这边第一天就感受到了技术氛围浓厚，音视频方面全是用自己的服务，之前很少自己写底层的顿时，感觉压力山大。接到的第一个任务就是关于iOS音视频处理，这里简单记录下自己看过的一些音频相关知识点，视频相关后续放出。<br><a id="more"></a></p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>现实生活中，我们听到的声音都是时间连续的，我们称为这种信号叫<code>模拟信号</code>。模拟信号需要进行<code>数字化</code>以后才能在计算机中使用。目前我们在计算机上进行音频播放都需要依赖于音频文件。</p>
+<p><strong>音频文件的生成过程是将<code>声音信息采样</code>、<code>量化</code>和<code>编码</code>产生的<code>数字信号</code>的过程</strong>。人耳所能听到的声音，最低的频率是从20Hz起一直到最高频率20KHZ，因此音频文件格式的最大带宽是20KHZ。根据奈奎斯特的理论，<strong>只有采样频率<code>高于</code>声音信号最高频率的两倍时，才能把数字信号表示的声音还原成为原来的声音，所以音频文件的采样率一般在40~50KHZ，比如最常见的CD音质采样率44.1KHZ。</strong></p>
+<p>对声音进行采样、量化过程被称为脉冲编码调制（Pulse Code Modulation），<code>简称PCM</code>。<strong>PCM数据是最原始的音频数据完全无损</strong>，所以PCM数据虽然音质优秀但体积庞大，为了解决这个问题先后诞生了一系列的音频格式，这些音频格式运用不同的方法对音频数据进行压缩，<strong>其中有无损压缩（ALAC、APE、FLAC）和有损压缩（MP3、AAC、OGG、WMA）两种</strong>。</p>
+<p>位速/比特率/码率描述的都是一个东西，<strong>是指在一个数据流中每秒钟能通过的信息量</strong>，<code>代表了压缩质量</code>，比如MP3常用码率有128kbit/s、160kbit/s、320kbit/s等等，越高代表着声音音质越好。MP3中的数据有ID3和音频数据组成，ID3用于存储歌名、演唱者、专辑、音轨等我们可以常见的信息。</p>
+<h3 id="简化声音处理流程"><a href="#简化声音处理流程" class="headerlink" title="简化声音处理流程"></a>简化声音处理流程</h3><p>模拟信号 -&gt; 输入设备（传递电压值）-&gt; 声卡(经过采样跟量化（即设置声音大小等各种值）) -&gt; 磁盘（文件） -&gt; 声卡 -&gt; 输出设备 -&gt; 模拟信号</p>
+<p>我们声音在物理上用波形表示，那么我们将这些波形称作为模拟信号。而我们计算机磁盘只能存储（01010101）的格式。我们将模拟信号转换成能够被磁盘存储的格式（010101）称之为数字信号。这个转换的过程我们叫模数转换。</p>
+<p>我们发出来的声音（模拟信号）是连续的，我们如果要一直的对模拟信号进行转化，产生的数字信号会很大。那么我们就要采样，而<strong>采样精度就是每秒计算机对模拟信号进行采样的次数</strong>。最常见的采样精度就是上面提到的44.1khz/s,这个是经过大师们多年研究得出的数据，低于这个数据，效果就会很差，而高于这个数据，效果的差距不是很明显。</p>
+<p>采样后会后是变成了（0101010110100101…），那声音的音量是有大小的，那这串数据，怎样表示声音的大小呢？ 这就涉及到了比特率，它是指在一个数据流中每秒钟能通过的信息量。 比特率就是将声音的大小划分为多少等级。举例下：8比特，在二进制中，表示有8位，表示的十进制的值就是0（00000000）～256（11111111），那每个数值就代表着一个声音大小。</p>
+<blockquote>
+<p>过程可以简化为：波形在经过输入设备的时候，会产生电压值。声卡通过计算采样率、比特率，以每秒几次的频率去获取这些电压值，然后将这些电压值以几bit的形式转换成数字信号。计算机将数据格式存储为文件。</p>
+</blockquote>
+<p><strong>文件是用来装数字信号的</strong>，文件包括了比特率、采样率、声道、编码方式、以及被编码过后的数字信号。</p>
+<p>文件格式就是制造者自己规定的一种名称，在每个文件格式都会特定支持几种编码格式。<strong>打个比方就是文件就是一个容器，里面可以装不同的水，有的可以装一种，有的可以装好几种。</strong></p>
+<p>经过采样后的数字信号很大，有时候我们不需要这么大的，所以我们就要进行编码压缩，当然压缩技术都是有损的。在不大影响音频的效果的情况下，<strong>舍弃掉一些高频或者低频的数据</strong>。</p>
+<h3 id="采样频率-采样精度"><a href="#采样频率-采样精度" class="headerlink" title="采样频率(采样精度)"></a>采样频率(采样精度)</h3><p>采样频率是指单位时间内对声音模拟信号的采样次数。采样率类似于视频的帧数，比如电影的采样率是24Hz。<strong>当我们把采样到的一个个静止画面再以采样率同样的速度回放时，看到的就是连续的画面。</strong>同样的道理，把以44.1kHZ采样率记录的CD以同样的速率播放时，就能听到连续的声音。显然，这个采样率越高，听到的声音和看到的图像就越连贯。</p>
+<h3 id="采样位数"><a href="#采样位数" class="headerlink" title="采样位数"></a>采样位数</h3><p>采样位数可以理解为采集卡处理声音的解析度。电脑中的声音文件是用数字0和1来表示的。连续的模拟信号按一定的采样频率经数码脉冲取样后，<strong>每一个离散的脉冲信号被以一定的量化精度量化成一串二进制编码流</strong>，<code>这串编码流的位数</code>即为采样位数，也称为量化精度。</p>
+<h3 id="编码格式"><a href="#编码格式" class="headerlink" title="编码格式"></a>编码格式</h3><p>可以理解为每种音频格式不同的编解码方式，而iOS下这些编码方式被集中到一个枚举中.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">CF_ENUM(AudioFormatID)</div><div class="line">&#123;</div><div class="line">    kAudioFormatLinearPCM               = &apos;lpcm&apos;,</div><div class="line">    kAudioFormatAC3                     = &apos;ac-3&apos;,</div><div class="line">    kAudioFormat60958AC3                = &apos;cac3&apos;,</div><div class="line">    kAudioFormatAppleIMA4               = &apos;ima4&apos;,</div><div class="line">    kAudioFormatMPEG4AAC                = &apos;aac &apos;,</div><div class="line">    kAudioFormatMPEG4CELP               = &apos;celp&apos;,</div><div class="line">    kAudioFormatMPEG4HVXC               = &apos;hvxc&apos;,</div><div class="line">    kAudioFormatMPEG4TwinVQ             = &apos;twvq&apos;,</div><div class="line">    kAudioFormatMACE3                   = &apos;MAC3&apos;,</div><div class="line">    kAudioFormatMACE6                   = &apos;MAC6&apos;,</div><div class="line">    kAudioFormatULaw                    = &apos;ulaw&apos;,</div><div class="line">    kAudioFormatALaw                    = &apos;alaw&apos;,</div><div class="line">    kAudioFormatQDesign                 = &apos;QDMC&apos;,</div><div class="line">    kAudioFormatQDesign2                = &apos;QDM2&apos;,</div><div class="line">    kAudioFormatQUALCOMM                = &apos;Qclp&apos;,</div><div class="line">    kAudioFormatMPEGLayer1              = &apos;.mp1&apos;,</div><div class="line">    kAudioFormatMPEGLayer2              = &apos;.mp2&apos;,</div><div class="line">    kAudioFormatMPEGLayer3              = &apos;.mp3&apos;,</div><div class="line">    kAudioFormatTimeCode                = &apos;time&apos;,</div><div class="line">    kAudioFormatMIDIStream              = &apos;midi&apos;,</div><div class="line">    kAudioFormatParameterValueStream    = &apos;apvs&apos;,</div><div class="line">    kAudioFormatAppleLossless           = &apos;alac&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_HE             = &apos;aach&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_LD             = &apos;aacl&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_ELD            = &apos;aace&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_ELD_SBR        = &apos;aacf&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_ELD_V2         = &apos;aacg&apos;,    </div><div class="line">    kAudioFormatMPEG4AAC_HE_V2          = &apos;aacp&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_Spatial        = &apos;aacs&apos;,</div><div class="line">    kAudioFormatAMR                     = &apos;samr&apos;,</div><div class="line">    kAudioFormatAMR_WB                  = &apos;sawb&apos;,</div><div class="line">    kAudioFormatAudible                 = &apos;AUDB&apos;,</div><div class="line">    kAudioFormatiLBC                    = &apos;ilbc&apos;,</div><div class="line">    kAudioFormatDVIIntelIMA             = 0x6D730011,</div><div class="line">    kAudioFormatMicrosoftGSM            = 0x6D730031,</div><div class="line">    kAudioFormatAES3                    = &apos;aes3&apos;,</div><div class="line">    kAudioFormatEnhancedAC3             = &apos;ec-3&apos;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>比较通俗的理解：封装格式和编码的关系，就是和酒瓶与酒的关系差不多，而播放器就是开酒器。为了可以喝更好的酒，最好先了解酒是什么酒，酒瓶是什么酒瓶，怎么使用开酒器开酒瓶，码率或者可以比喻做酒的原料。对于同一个酒瓶和做同一种酒的情况下，如果原料太少，又要要求用酒把酒瓶灌满，此时只好兑水了，酒的品质就会变差了。然而，如果原料太多，又会造成原料浪费。所以要做好酒，我们就需要充足的原料。</p>
+<p><strong>封装格式就是文件格式，编码就是编码格式。</strong></p>
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><h3 id="播放流程简化"><a href="#播放流程简化" class="headerlink" title="播放流程简化"></a>播放流程简化</h3><p>这里以播放MP3文件为例：</p>
+<ol>
+<li>读取MP3文件</li>
+<li>解析采样率、码率、时长等信息，分离MP3中的音频帧</li>
+<li>对分离出来的音频帧解码得到PCM数据</li>
+<li>对PCM数据进行音效处理（均衡器、混响器等，非必须）</li>
+<li>把PCM数据解码成音频信号</li>
+<li>把音频信号交给硬件播放<br>重复1-6步直到播放完成</li>
+</ol>
+<p>采集和量化的过程和上面的过程基本相反。</p>
+<p>iOS对音频处理的封装</p>
+<p><img src="http://msching.github.io/images/iOS-audio/api-architectural-layers.png" alt=""></p>
+<p>上述模块接口说明：</p>
+<ul>
+<li>Audio File Services：读写音频数据，可以完成播放流程中的第2步；</li>
+<li>Audio File Stream Services：对音频进行解码，可以完成播放流程中的第2步；</li>
+<li>Audio Converter services：音频数据转换，可以完成播放流程中的第3步；</li>
+<li>Audio Processing Graph Services：音效处理模块，可以完成播放流程中的第4步；</li>
+<li>Audio Unit Services：播放音频数据：可以完成播放流程中的第5步、第6步；</li>
+<li>Extended Audio File Services：<strong>Audio File Services和Audio Converter services的结合体；<br>AVAudioPlayer/AVPlayer(AVFoundation)：高级接口，可以完成整个音频播放的过程（包括本地文件和网络流播放，第4步除外）；一般我们都是在这层操作</strong></li>
+<li>Audio Queue Services：高级接口，可以进行录音和播放，可以完成播放流程中的第3、5、6步；</li>
+<li>OpenAL：用于游戏音频播放，基本没用到过</li>
+</ul>
+<h2 id="常用的第三方库"><a href="#常用的第三方库" class="headerlink" title="常用的第三方库"></a>常用的第三方库</h2><p><a href="https://github.com/syedhali/EZAudio#toc24" target="_blank" rel="external">EZAudio</a>这是OC版本，目前已经不再维护。作者转向了Swift项目<a href="https://github.com/audiokit/AudioKit" target="_blank" rel="external">AudioKit</a>。这个库也很牛逼。</p>
+<h2 id="实时播放"><a href="#实时播放" class="headerlink" title="实时播放"></a>实时播放</h2><p><a href="http://www.jianshu.com/p/feeb107b6657" target="_blank" rel="external">AAC 到 PCM 音频解码</a><br><a href="http://www.jianshu.com/p/279a9e5b36b5" target="_blank" rel="external">使用AudioToolbox播放AAC</a></p>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/CoreAudioEssentials/CoreAudioEssentials.html#//apple_ref/doc/uid/TP40003577-CH10-SW1" target="_blank" rel="external">Core Audio Essentials</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><a href="http://blog.sina.com.cn/s/blog_7a162d000101befe.html" target="_blank" rel="external">IOS开发笔记之音频（一）</a><br><a href="https://brownfeng.github.io/2016/07/28/iOS%E9%9F%B3%E9%A2%91%E7%B3%BB%E5%88%97(%E5%9B%9B" target="_blank" rel="external">iOS音频系列(四)–音频的文件格式和数据格式</a>/)  基本概念解释<br><a href="https://brownfeng.github.io/2016/07/25/iOS%E9%9F%B3%E9%A2%91%E7%B3%BB%E5%88%97(%E4%B8%80" target="_blank" rel="external">iOS音频系列(一)–音频基础</a>/)  对一些基本概念的解释</p>
+<p><a href="http://xuzichao.com/2015/03/15/IOS%20%E9%9F%B3%E9%A2%91%E4%B8%80%E8%A7%88/" target="_blank" rel="external">IOS 音频一览</a> 文章后面部分有对特定问题的解决，值得一看</p>
+<h2 id="系列"><a href="#系列" class="headerlink" title="系列"></a>系列</h2><p><a href="http://msching.github.io/blog/categories/ios-audio/" target="_blank" rel="external">iOS音频播放系列</a> 强力推荐 🎯<br><a href="http://justinyangjing.github.io/2016/07/14/iOS%E9%9F%B3%E9%A2%91%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%80%9A%E4%BF%A1/" target="_blank" rel="external">iOS音频编程之实时语音通信</a>用到了一些偏底层的<br><a href="http://chenhu1001.github.io/archives/" target="_blank" rel="external">iOS直播系列</a><br><a href="http://www.jianshu.com/p/502a49c8dcd3" target="_blank" rel="external">iOS在线音频流播放</a>这个作者也是非常牛逼，关于图像处理和音频处理的都可以看看。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> audio </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> audio </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[CAShapeLayer大法(未完)]]></title>
+      <url>http://yoursite.com/2017/04/06/2017/4/CAShapeLayer%E5%A4%A7%E6%B3%95/</url>
+      <content type="html"><![CDATA[<p>好久都没有研究iOS动画了，昨天看到了一个不规则view。当时就想应该是用CAShapeLayer做的。于是这里回顾一下CAShapeLayer、CADisplayLink、UIBezierPath，mask。<br><a id="more"></a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>关于iOS动画，已经有许许多多的例子和博客写过。这里也只是复习一下，如果深入了解。可以看一看业界一本公认的动画书籍<a href="http://download.csdn.net/detail/qqyinzhe/7357517" target="_blank" rel="external">iOS Core Animation Advanced Techniques</a>。里面的示例代码也有源码地址在<a href="https://github.com/pflnh/CoreAnimationCode" target="_blank" rel="external">CoreAnimationCode</a>。</p>
+<h2 id="几个类的说明"><a href="#几个类的说明" class="headerlink" title="几个类的说明"></a>几个类的说明</h2><h3 id="CADisplayLink"><a href="#CADisplayLink" class="headerlink" title="CADisplayLink"></a>CADisplayLink</h3><ul>
+<li><p>A CADisplayLink object is a timer object that allows <strong>your application to synchronize its drawing to the refresh rate of the display</strong></p>
+</li>
+<li><p>大致有以下几点需要注意。</p>
+<ol>
+<li>CADisplayLink是一个能让我们以和屏幕刷新率相同的频率将内容画到屏幕上的定时器</li>
+<li>一但 CADisplayLink 以特定的模式注册到runloop之后，每当屏幕需要刷新的时候，runloop就会调用CADisplayLink绑定的target上的selector，这时target可以读到  CADisplayLink 的每次调用的时间戳，用来准备下一帧显示需要的数据。</li>
+<li>可以通过pause属性开控制CADisplayLink的运行。当我们想结束一个CADisplayLink的时候，应该调用-(void)invalidate从runloop中删除并删除之前绑定的 target跟selector</li>
+<li>CADisplayLink 不能被继承。</li>
+</ol>
+</li>
+<li><p>附带提一下和与 NSTimer 有什么不同</p>
+<ol>
+<li>NSTimer的精确度就显得低了点，比如NSTimer的触发时间到的时候，runloop如果在阻塞状态，触发时间就会推迟到下一个runloop周期。并且 NSTimer新增了tolerance属性，让用户可以设置可以容忍的触发的时间的延迟范围。</li>
+<li>CADisplayLink使用场合相对专一，适合做UI的不停重绘，比如自定义动画引擎或者视频播放的渲染。</li>
+<li>NSTimer的使用范围要广泛的多，各种需要单次或者循环定时处理的任务都可以使用。</li>
+</ol>
+</li>
+</ul>
+<h3 id="UIBezierPath"><a href="#UIBezierPath" class="headerlink" title="UIBezierPath"></a>UIBezierPath</h3><ul>
+<li>The UIBezierPath class lets you define a path consisting of straight and curved line segments and render that path in your custom views. You use this class initially to specify just the geometry for your path. Paths can define simple shapes such as rectangles, ovals, and arcs or they can define complex polygons that incorporate a mixture of straight and curved line segments. After defining the shape, you can use additional methods of this class to render the path in the current drawing context.</li>
+</ul>
+<p>建议先看看<a href="http://blog.csdn.net/crayondeng/article/details/11093689" target="_blank" rel="external">iOS UIBezierPath类 介绍</a></p>
+<p> UIBezierPath类可以创建基于矢量的路径，它是Core Graphics框架关于CGPathRef类型数据的封装，利用它创建直线或者曲线来构建我们想要的形状，每一个直线段或者曲线段的结束位置就是下一个线段开始的地方。这些连接的直线或者曲线的集合成为subpath。一个UIBezierPath对象的完整路径包括一个或者多个subpath。</p>
+<p>使用步骤：</p>
+<ol>
+<li>创建一个Bezier Path对象。</li>
+<li>使用方法moveToPoint:去设置初始线段的起点。</li>
+<li>添加line或者curve去定义一个或者多个subpath。</li>
+<li>修改UIBezierPath对象跟绘图相关的属性。</li>
+</ol>
+<h3 id="CAShapeLayer"><a href="#CAShapeLayer" class="headerlink" title="CAShapeLayer"></a>CAShapeLayer</h3><ul>
+<li>A layer that draws a cubic Bezier spline in its coordinate space</li>
+</ul>
+<p>建议先看看<a href="http://www.cnblogs.com/YouXianMing/p/3678709.html" target="_blank" rel="external">CAShapeLayer</a></p>
+<p>CAShapeLayer是一个通过矢量图形而不是bitmap来绘制的图层子类。CAShapeLayer可以用来绘制所有通过CGPath来表示的形状，上面讲到了可以用UIBezierPath来创建任何你想要的路径，使用CAShapeLayer的属性path配合UIBezierPath创建的路径，就可以呈现出我们想要的形状。</p>
+<p><strong>这个形状不一定要闭合，图层路径也不一定是连续不断的，你可以在CAShapeLayer的图层上绘制好几个不同的形状</strong>，但是你只有一次机会去设置它的path、lineWith、lineCap等属性，如果你想同时设置几个不同颜色的多个形状，你就需要为每个形状准备一个图层。</p>
+<h3 id="mask"><a href="#mask" class="headerlink" title="mask"></a>mask</h3><ul>
+<li>An optional layer whose alpha channel is used to mask the layer’s content.</li>
+<li>The layer’s alpha channel determines how much of the layer’s content and background shows through. Fully or partially opaque pixels allow the underlying content to show through but fully transparent pixels block that content.</li>
+</ul>
+<p>建议先看看<a href="https://zsisme.gitbooks.io/ios-/content/chapter4/layer-masking.html" target="_blank" rel="external">图层蒙板</a></p>
+<p>CALayer有一个属性叫做mask，通常被称为蒙版图层，这个属性本身也是CALayer类型，有和其他图层一样的绘制和布局属性。它类似于一个子视图，相对于父图层（即拥有该属性的图层）布局，但是它却不是一个普通的子视图。不同于一般的subLayer，mask定义了父图层的可见区域，简单点说就是最终父视图显示的形态是父视图自身和它的属性mask的交集部分。</p>
+<p>mask图层的color属性是无关紧要的，<strong>真正重要的是它的轮廓</strong>，mask属性就像一个切割机，父视图被mask切割，相交的部分会留下，其他的部分则被丢弃。</p>
+<p><strong>CALayer的蒙版图层真正厉害的地方在于蒙版图层不局限于静态图，任何有图层构成的都可以作为mask属性，这意味着蒙版可以通过代码甚至是动画实时生成。</strong></p>
+<h2 id="实际例子"><a href="#实际例子" class="headerlink" title="实际例子"></a>实际例子</h2><p>TODO</p>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="http://summertreee.github.io/blog/2016/08/07/dong-hua-huang-jin-da-dang-cadisplaylink-and-cashapelayer/" target="_blank" rel="external">动画黄金搭档:CADisplayLink &amp; CAShapeLayer</a><br><a href="http://www.cocoachina.com/ios/20160711/17007.html" target="_blank" rel="external">关于CAShapeLayer的一些实用案例和技巧</a><br><a href="http://www.cocoachina.com/ios/20160214/15251.html" target="_blank" rel="external">放肆地使用UIBezierPath和CAShapeLayer画各种图形</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> animation </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> animation </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[自己整理iOS 常用第三方（持续更新...）]]></title>
+      <url>http://yoursite.com/2017/04/06/2017/4/%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86iOS%20%E5%B8%B8%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9/</url>
+      <content type="html"><![CDATA[<p>网上有很多整理使用第三方库的文章，毕竟是别人使用的，有一些做iOS家喻户晓的比如AFNetworking、SDWebImage，SpringPop这里就不用罗列了。这里主要总结一下自己平时用到的一些第三方，或者自己觉得很有学习必要的第三方。<br><a id="more"></a></p>
+<h1 id="自己整理iOS-常用第三方-持续更新…-⭐️💖🏅"><a href="#自己整理iOS-常用第三方-持续更新…-⭐️💖🏅" class="headerlink" title="自己整理iOS 常用第三方(持续更新…)⭐️💖🏅"></a>自己整理iOS 常用第三方(持续更新…)⭐️💖🏅</h1><ul>
+<li><a href="http://alcatraz.io/" target="_blank" rel="external">Alcatraz插件管理</a></li>
+<li><a href="https://github.com/alcatraz/Alcatraz/issues/498" target="_blank" rel="external">GitHub Alcatraz</a></li>
+</ul>
+<h2 id="一、UI"><a href="#一、UI" class="headerlink" title="一、UI"></a>一、UI</h2><h3 id="广告引导"><a href="#广告引导" class="headerlink" title="广告引导"></a>广告引导</h3><ul>
+<li><a href="https://github.com/CoderZhuXH/XHLaunchAd" target="_blank" rel="external">XHLaunchAd</a> github最高star</li>
+<li><a href="https://github.com/AllLuckly/LBLaunchImageAd" target="_blank" rel="external">LBLaunchImageAd</a>功能不是很强大的，但是满足需求了</li>
+<li><a href="https://github.com/12207480/TYLaunchAnimation" target="_blank" rel="external">TYLaunchAnimation</a>相比上面的，功能更少</li>
+<li><a href="https://github.com/amber01/WSDrawCircleProgress" target="_blank" rel="external">WSDrawCircleProgress</a>启动右上角原型</li>
+</ul>
+<h3 id="轮播图"><a href="#轮播图" class="headerlink" title="轮播图"></a>轮播图</h3><ul>
+<li><a href="https://github.com/gsdios/SDCycleScrollView" target="_blank" rel="external">SDCycleScrollView</a>传统轮播图</li>
+<li><a href="https://github.com/PageGuo/NewPagedFlowView" target="_blank" rel="external">NewPagedFlowView</a>视差轮播图</li>
+</ul>
+<h3 id="提示框"><a href="#提示框" class="headerlink" title="提示框"></a>提示框</h3><ul>
+<li><a href="https://github.com/wimagguc/ios-custom-alertview" target="_blank" rel="external">ios-custom-alertview</a></li>
+<li><a href="https://github.com/lmcd/LMAlertView" target="_blank" rel="external">LMAlertView</a></li>
+</ul>
+<h3 id="下载进度提示"><a href="#下载进度提示" class="headerlink" title="下载进度提示"></a>下载进度提示</h3><ul>
+<li><p><a href="https://github.com/PavelKatunin/DownloadButton" target="_blank" rel="external">DownloadButton</a><br>  <img src="https://cloud.githubusercontent.com/assets/1636737/7920830/2c4470da-08aa-11e5-99be-e7e9a04479f8.png" alt=""></p>
+</li>
+<li><p><a href="https://github.com/Guidebook/gbkui-button-progress-view" target="_blank" rel="external">gbkui-button-progress-view</a><br>  <img src="https://camo.githubusercontent.com/c21307792a960e90d630440e09d308d7c854dac3/687474703a2f2f706574656c6164612e636f6d2f696d616765732f706c6164612d6c6f6164696e672d627574746f6e2e676966" alt=""></p>
+</li>
+<li><p><a href="https://github.com/Josin22/JSDownloadView" target="_blank" rel="external">JSDownloadView</a><br>  <img src="https://raw.githubusercontent.com/Josin22/JSDownloadView/master/JSDownloadViewDemo/Source/download.gif" alt=""></p>
+</li>
+<li><a href="https://github.com/daria-kopaliani/DAProgressOverlayView" target="_blank" rel="external">DAProgressOverlayView</a><br>  <img src="https://github.com/daria-kopaliani/DAProgressOverlayView/raw/master/DAProgressOverlayView.gif" alt=""></li>
+<li><a href="https://github.com/Karthus1110/ZYDownloadProgress" target="_blank" rel="external">ZYDownloadProgress</a><br>  <img src="https://camo.githubusercontent.com/f457fa6aeb5b8e67bd3f01bb95d41eb0edbc7aad/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f313234393530352d613134336261316535333063653337322e6769663f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970" alt=""></li>
+</ul>
+<h2 id="二、应用设置"><a href="#二、应用设置" class="headerlink" title="二、应用设置"></a>二、应用设置</h2><h3 id="国际化"><a href="#国际化" class="headerlink" title="国际化"></a>国际化</h3><ul>
+<li><a href="https://github.com/stefanceriu/SCStringsUtility" target="_blank" rel="external">SCStringsUtility</a> 快速国际化，通过导入CSV实现快捷导入。</li>
+</ul>
+<h2 id="三、编程语法"><a href="#三、编程语法" class="headerlink" title="三、编程语法"></a>三、编程语法</h2><ul>
+<li><a href="https://github.com/qddnovo/LinkBlock" target="_blank" rel="external">LinkBlock</a>  <strong>这个比较优秀</strong><br>objc链式编程语法糖扩展，旨在将冗余逻辑集中，专注于编码的逻辑，使代码结构清晰。</li>
+<li><a href="https://github.com/Draveness/ChainableKit" target="_blank" rel="external">ChainableKit</a><br>ChainableKit is a convience way to set up UIKit component with chainable syntax. This framework is inspired by Masonry and JHChainableAnimations.</li>
+<li><a href="https://github.com/jhurray/JHChainableAnimations" target="_blank" rel="external">JHChainableAnimations</a><br>Easy to read and write chainable animations in Objective-C and Swift</li>
+</ul>
+<h2 id="四、网络"><a href="#四、网络" class="headerlink" title="四、网络"></a>四、网络</h2><ul>
+<li><a href="https://github.com/yuantiku/YTKNetwork" target="_blank" rel="external">YTKNetwork</a> 对AF的二次封装，猿题库开源，值得学习</li>
+<li><a href="https://github.com/casatwy/RTNetworking" target="_blank" rel="external">RTNetworking</a>在iOS架构系列文章中，作者给出了自己的方案，这个网络库就是他的为网络层解耦所写，和YTKNetwork有些类似，适合一些大型项目。</li>
+<li><a href="https://github.com/ShelinShelin/OffLineCache" target="_blank" rel="external">OffLineCache</a>数据库离线缓存思路，以及AFN的再次封装，离线状态时从数据库加载数据</li>
+<li><a href="https://github.com/jkpang/PPNetworkHelper" target="_blank" rel="external">PPNetworkHelper</a>AFNetworking 3.x 与YYCache封装,一句代码搞定数据请求与缓存,告别FMDB!控制台直接打印json中文字符。但bug是有点多。</li>
+</ul>
+<h2 id="五、分类（Category）"><a href="#五、分类（Category）" class="headerlink" title="五、分类（Category）"></a>五、分类（Category）</h2><ul>
+<li><a href="https://github.com/shaojiankui/JKCategories" target="_blank" rel="external">JKCategories</a>包含了”JKUIKit.h”,”JKFoundation.h”,”JKCoreData.h”,”JKCoreLocation.h”,”JKMapKit.h”,”JKQuartzCore.h”，比较强大除此之外还有YYKit里面也有许多类似的</li>
+<li><a href="https://github.com/brentsimmons/QSKit" target="_blank" rel="external">QSKit</a>star没有上面这个多，里面也有挺多可以看得</li>
+</ul>
+<h2 id="六、动画"><a href="#六、动画" class="headerlink" title="六、动画"></a>六、动画</h2><ul>
+<li><a href="https://github.com/YouXianMing/Animations" target="_blank" rel="external">Animations</a> ⭐️⭐️⭐️基本上涵盖了iOS用到的所有动画效果，而且还有一个开源的天气类型app<a href="https://github.com/YouXianMing/YoCelsius" target="_blank" rel="external">YoCelsius</a>。作者的博客里面也有很多关于动画方面的文章写得不错。<a href="http://www.cnblogs.com/YouXianMing/tag/%E5%8A%A8%E7%94%BB/" target="_blank" rel="external">动画</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> animation </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> animation </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[typeof、 __typeof 、及__typeof __的区别]]></title>
+      <url>http://yoursite.com/2017/04/05/2017/4/typeof%E5%90%84%E4%B8%AA%E4%B8%8D%E5%90%8C/</url>
+      <content type="html"><![CDATA[<p>这个问题是一个同事在看一些第三方源码的时候产生的疑惑，顺便就问了我。<br><a id="more"></a></p>
+<h1 id="解惑"><a href="#解惑" class="headerlink" title="解惑"></a>解惑</h1><p><code>__typeof__()</code>和<code>__typeof()</code>是对c语言的编译扩展，因为标准的c没有包含这样的操作符。标准c要求会对带有双下划线进行编译器预处理，这也是为什么我们在命名自己的方法和变量的时候不能用双下划线。</p>
+<p><code>typeof()</code>准确来讲是和上面两者相同，只是更加强调了这个特性，而这个特性是几乎每一个现代编译器都支持的。<code>typeof()</code>也是对c的扩展，如果用<code>Objective-c</code>写代码，将会用<code>Clang</code>编译器。</p>
+<p>Clang是不支持<code>typeof()</code>的使用，但是从技术上讲，他是在c语法被设置为<code>gnu</code>类型会起作用。然而<code>__typeof__()</code>是支持<code>c和gnu</code>语法。</p>
+<p>如果用Xcode作为IDE，默认为c语法设置的是<code>GNU99</code>，而且<code>&#39;asm&#39; &#39;inline&#39; &#39;typeof&#39;</code>选项是<code>YES</code>。所以使用<code>typeof()</code>不会有任何问题。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-f073ff010fb7316e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如果想更为安全的使用<code>Clang</code>编译器，那么就使用<code>__typeof__()</code>。这样的话就不会当你有人关掉<code>typeof</code>选项的时候造成的影响。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> issue </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> compiler </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[最近遇到的问题]]></title>
+      <url>http://yoursite.com/2017/04/05/2017/4/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+      <content type="html"><![CDATA[<p>记录一下最近遇到的问题。<br><a id="more"></a></p>
+<h1 id="libpng-error-CgBI-unhandled-critical-chunk"><a href="#libpng-error-CgBI-unhandled-critical-chunk" class="headerlink" title="libpng error: CgBI: unhandled critical chunk"></a>libpng error: CgBI: unhandled critical chunk</h1><p>这个错是出现在Xcode7.3之后。解决办法：在buildsetting里面，将<code>Remove Text Metadata From PNG Files</code>的值改为<code>NO</code>。默认值为YES.</p>
+<p>因为Xcode7.3之后，默认会将元数据从png格式的文件中移除。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> issue </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> png </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[技术博客阅读笔记iOS篇(一、MRPEAK)]]></title>
+      <url>http://yoursite.com/2017/04/05/2017/4/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>每天阅读那么多的博客，为什么自己对其中优秀的博客做一个笔记方便自己翻阅呢。而且牛逼的博主，其他文章含量金量也很高。虽然看博客不如看技术书籍来的全面、系统，读完之后也有不少的收获。关于泛读和精读，下面有篇文章有相应的介绍……<br><a id="more"></a></p>
+<h2 id="博主MRPEAK"><a href="#博主MRPEAK" class="headerlink" title="博主MRPEAK"></a><a href="http://mrpeak.cn/" target="_blank" rel="external">博主MRPEAK</a></h2><p>一下内容大部分是摘自博客原文，如需细致阅读，建议看原文。<br><a href="http://mrpeak.cn/Archives/" target="_blank" rel="external">历史文章合集</a></p>
+<h3 id="一、-如何设计一个通讯协议"><a href="#一、-如何设计一个通讯协议" class="headerlink" title="一、 如何设计一个通讯协议"></a><a href="http://mrpeak.cn/blog/tcp-rpc-protocol/" target="_blank" rel="external">一、 如何设计一个通讯协议</a></h3><p>幸好作者提供了项目源码，可以直接看源码<a href="https://github.com/music4kid/TKeyboard" target="_blank" rel="external">TKeyboard</a></p>
+<p>google一搜如何设计一个通讯协议，出现了一大片文章。这里摘取比较有代表性的。<br>找到一个牛逼哄哄的网站<a href="http://www.52im.net/" target="_blank" rel="external">即时通信网</a>，做了IM这么久现在才知道有这样好资源。</p>
+<p><a href="http://www.52im.net/thread-283-1-1.html" target="_blank" rel="external">理论联系实际：一套典型的IM通信协议设计详解</a><br><a href="http://gcloud.qq.com/forum/topic/56976ee6ceddce8561c9494d" target="_blank" rel="external">如何设计一个RPC系统</a></p>
+<p>应用层常见的有三种：文本协议（Http）、二进制协议(ip)、流式XML协议（xmpp）。他们的各自优缺点可以大致总结出来。后文建议<a href="http://www.52im.net/thread-277-1-1.html" target="_blank" rel="external">强列建议将Protobuf作为你的即时通讯应用数据传输格式</a></p>
+<p>工作内容主要有：一是数据的序列化，即将我们平时所用的 model 转化为二进制流，其二是定义好包的格式，在通讯框架里做好包的切割，解析，和传递。最后简化调用流程，提供一套简单的类似 http 的双向数据调用 API 即可。</p>
+<ul>
+<li>基本思路<ol>
+<li>第一个序列化的问题好解决，<strong>已有 google 的成熟方案 protobuf 可以使用（感觉业界都推荐用这个，但是之前在iOS端用过，发现了很多坑爹的地方）</strong>，而且还有基于 Objective C 的版本，model 的序列化和反序列化，一个 API 调用即可完成。</li>
+<li>第二个问题是包的格式定义。学习 TCP/IP 的意义在这里就能体现了，无论是 TCP 包还是 IP 包，都有自己的包格式定义，而且往往是一个 header 配合一个 payload（类似于 http 的 body）。之所以要有包，是因为二进制流只完成 stream 的传输，并不知道一次数据请求与相应的起始和结束，我们要预先定义好包结构才能做解析。</li>
+<li>要能实现包的准确切割，我们需要明确包的长度。所以必须在 header 中留一个字段，表达整个包（header + payload）由多少 bytes 构成，两个字节的长度就可以描述 0~65535 个字节数，具体使用多少个字节就看协议的使用场景了。</li>
+<li>因为是 RPC 调用协议，所以包体里必须有调用的名称，即 API name 字段，这个 name 是可变长度，所以也需要将其长度信息加入包体中，原则上，所有可变长度的内容都需记录其精确的长度信息，否则无法做信息的切割。另外，调用方还需要知道包是请求的回应（response）还是另一端的通知（notify），所以我们还需要定义 call type 信息，这种信息一个 8 比特位的枚举量就绰绰有余了，这种固定长度的信息就不需要记录其长度信息了。</li>
+<li>一般固定长度的信息我们放在 header 中，可变长度的信息我们则放入 payload 中，当然，我们 RPC 调用的具体参数（经由 protobuf 序列化之后的 stream）也是放入 payload 中，接收方接收以后，只需读取固定长度的字节，即可通过反序列化，再在接收方还原成具体的应用层数据。</li>
+</ol>
+</li>
+</ul>
+<p>特别注意：<strong>因为我们是在设计应用层协议，所以还需要考虑传输层是可靠还是不可靠，CoreBlueTooth 实际上既提供了类似于 TCP 的可靠传输（CBCharacteristicPropertyIndicate），也有类似于 UDP 的不可靠传输（CBCharacteristicPropertyNotify），不明白这一点，必然会踩坑</strong></p>
+<h3 id="二、TCP-IP-系列之重新认识-IP-地址"><a href="#二、TCP-IP-系列之重新认识-IP-地址" class="headerlink" title="二、TCP/IP 系列之重新认识 IP 地址"></a><a href="http://mrpeak.cn/blog/tcp-ip/" target="_blank" rel="external">二、TCP/IP 系列之重新认识 IP 地址</a></h3><p>大学里面网络基础学过，但是基本上都忘记了。看到这篇突然想起了一些<code>远古</code>的记忆。</p>
+<blockquote>
+<p>internet 其实是由无数个子网所构成，是一个二级的结构，第一级是子网，第二级才是子网中的设备。所以 internet 中设备 A 的信息要抵达设备 B，必须先要找到 B 所在的子网，进而再在子网中找到 B。</p>
+</blockquote>
+<p>IP 地址的结构：IP 地址 = 网络地址 + 主机地址。子网掩码（subnet mask） 就是为了分割 Network ID 和 Host ID 的</p>
+<h4 id="第一种切割方式"><a href="#第一种切割方式" class="headerlink" title="第一种切割方式"></a>第一种切割方式</h4><ul>
+<li>第一个字节为 Network ID，剩下三个字节为 Host ID</li>
+<li>第二个字节为 Network ID，剩下两个字节为 Host ID</li>
+<li><p>第三个字节为 Network ID，剩下一个字节为 Host ID<br>有问题</p>
+</li>
+<li><p>我们如何确定一个 IP 地址是属于 A B C 的哪一类呢？我们以第一个字节来做一些约定：</p>
+<ol>
+<li>如果第一个字节的起始比特位为 0，则是 A 类地址。</li>
+<li>如果第一个字节的起始比特位为 10，则是 B 类地址。</li>
+<li>如果第一个字节的起始比特位为 110，则是 C 类地址。</li>
+</ol>
+</li>
+</ul>
+<h4 id="第二种切割方式CIDR"><a href="#第二种切割方式CIDR" class="headerlink" title="第二种切割方式CIDR"></a>第二种切割方式CIDR</h4><p>全称为 Classless Inter-Domain Routin。CIDR 是新的子网掩码的表达方式和路由方式。这里注意 CIDR 和 CIDR notation 的区别，CIDR notation 是描述 IP 地址如何切割的方式，而 CIDR 描述的是基于 CIDR notation 的路由方式。</p>
+<p>CIDR notation 其实概念也很直白，它不再粗暴的以字节为粒度来切分 IP 地址，而是精确到 bit 位，我们看一个典型的 CIDR notation：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">123.121.114.144/23</div></pre></td></tr></table></figure>
+<p>注意 IP 地址后面的 /23，这就是 CIDR notation，<strong>它表示 IP 地址的前 23 bits 为 Network ID，剩余的 9 bits 为 Host ID。23 并不是 8 的倍数，我们将切分的精读提高到了 bit。</strong>我们可以通过简单的位运算，得到具体的 Network ID 和 Host ID，我们将 IP 地址和 /23 先转为二进制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">01111011.01111001.01110010.10010000 IP 地址</div><div class="line">11111111.11111111.11111110.00000000 /23 subnet mask</div></pre></td></tr></table></figure>
+<p>得到 Network ID 和 Host ID：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">01111011.01111001.01110010.00000000 Network ID</div><div class="line">00000000.00000000.00000000.10010000 Host ID</div></pre></td></tr></table></figure>
+<blockquote>
+<p>再将二进制转换为十进制，我们就得到了便于理解的 Network ID：123.121.114.0。由于 Host ID 占用 9 个 bits，这个子网里一共可以有 2 的 9 次方个主机数，也就是 512 个主机，这个子网网段的起始地址为 123.121.114.0，结束地址为 123.121.115.255。我们对于某一个网段内的 IP 地址，有个约定，第一个地址为 Network ID，最后一个地址是该子网内的 Broadcast ID，那么剩下的可用于子网内设备的 IP 地址数量就是 510 个了。</p>
+</blockquote>
+<p>IP 地址虽然只是一个二级的结构，但 IP 地址的分配却是一层一层，经历多层往下分发的，由一个国际机构 IANA 统一分配。具体规则可以参考 IANA 官网：<a href="https://www.iana.org/numbers" target="_blank" rel="external">https://www.iana.org/numbers</a></p>
+<p>用户拿到 IP 地址后，所发送包要经过一个个的路由器才能抵达正确的地址。</p>
+<h3 id="三、TCP-IP-系列之-Header-篇"><a href="#三、TCP-IP-系列之-Header-篇" class="headerlink" title="三、TCP/IP 系列之 Header 篇"></a><a href="http://mrpeak.cn/blog/tcp-headers/" target="_blank" rel="external">三、TCP/IP 系列之 Header 篇</a></h3><p><img src="http://www.mrpeak.cn/images/ws03.png" alt=""></p>
+<p>如果以一个 HTTP 请求为例，右图中 Application 部分就代表我们用 Charles 抓包时所感知的部分，这一部分要最后转化为光信号，在光纤中传输，还需要经过一层层的转化，这个转化过程说白了，就是在每一层加上一个 header。</p>
+<ul>
+<li>Application 层（HTTP）的数据在经过传输层（TCP Layer）的时候，会加上 TCP 的 header，成为一个 TCP Segment。</li>
+<li>传输层（TCP）的 Segment 在经过网络层（IP Layer）的时候，会加上 IP 的 header，成为一个 IP Packet。</li>
+<li>网络层的 IP Packet 在经过链路层（Link Layer）的时候，会加上Link Layer 的 header，成为一个 Frame。</li>
+<li>最后 Frame 会在物理层，将数字信号转化为物理信号传输。</li>
+</ul>
+<p>看张图片一切就明了了<br><img src="http://www.mrpeak.cn/images/ws05.png" alt=""></p>
+<p>深入研究可以看<a href="http://www.cnblogs.com/zhuimengle/p/5737848.html" target="_blank" rel="external">TCPdump抓包命令详解</a><br><a href="http://www.cnblogs.com/ggjucheng/archive/2012/01/14/2322659.html" target="_blank" rel="external">Linux tcpdump命令详解</a></p>
+<h3 id="四、TCP-IP-系列之初印象"><a href="#四、TCP-IP-系列之初印象" class="headerlink" title="四、TCP/IP 系列之初印象"></a><a href="http://mrpeak.cn/blog/tcp-preface/" target="_blank" rel="external">四、TCP/IP 系列之初印象</a></h3><p>0 和 1 是计算机世界的基础粒子，大量的 0 和 1 组合在一起就形成了一个流（Stream），客户端向服务器发送数据的时候，说白了就是一堆 0 和 1 的组合。一次完整的 http 会话是建立在一个 TCP 连接之上，这个 TCP 连接的生命周期内所有发送的数据最后可以看做是一个流。<strong>而在这个流里，我们可以按照某种规则把它切割成一个个的包（packet）。</strong>比如 TCP 三次握手里就包含了 SYN，SYN+ACK，ACK 三个包，而这三个包，不过是整个 TCP Stream 最开始的部分数据而已。</p>
+<p>所以简单来说，一个 TCP 连接里，是既有流的概念，又有包的存在，有些问题场景下会谈论流，另一些则会说起包，端看具体的场景如何。</p>
+<p>客户端和服务器之间有两根管道，一根上行（从客户端到服务器），一根下行（从服务器到客户端），管道里流动着无数的 0 和 1，有时候管道里是满的，有时候管道里则空空如也，每次发送数据，都会有大量的 0 和 1 从一端涌向另一端。</p>
+<h4 id="延迟"><a href="#延迟" class="headerlink" title="延迟"></a>延迟</h4><p>由两部分组成的，其一是 Transmission Delay，另一个是 Propagation Delay。</p>
+<p>Transmission Delay。计算机世界里的 0 和 1， 最后要能在光纤中传输，需要在 Physical Layer 将数字信号转化为物理信号，这个转化也是存在速度瓶颈的，我们用 Rate (bits/seconds) 来描述这个转化的速度，Rate 表示每一秒钟里，硬件设备能将多少 bits 转化为光信号放入光纤中。</p>
+<p> Propagation Delay。这才是大部分人所理解的传播延迟，和距离直接相关。</p>
+<h3 id="五、技术文章的阅读姿势🍎"><a href="#五、技术文章的阅读姿势🍎" class="headerlink" title="五、技术文章的阅读姿势🍎"></a><a href="http://mrpeak.cn/blog/ios-tech-article/" target="_blank" rel="external">五、技术文章的阅读姿势</a>🍎</h3><p>作者和自己的感想比较相似，关于泛读和精读给出了自己的解释。对于自己而言，确实是这样，总结出来的经验也非常值得自己借鉴。</p>
+<p>由于技术的知识体系往往是个树形的结构，单个术语下都有其相关的知识域，可以一层又一层牵扯出更多的子术语。在阅读文章遭遇这种树形结构的时候，要能抑制住自己不停探索的欲望，<strong>对于技术术语的学习只做适度延伸，最终的目的还是在于完成根部文章的阅读。</strong>尽量只做一到两层的延伸。</p>
+<p>尽量选择没人打扰的时间段来做阅读，可以是早上刚到公司，或者别人午睡时，总之越安静，越没人找越好。</p>
+<blockquote>
+<p><strong>对于基础知识的阅读，要重官方文档，切莫心急动手，看完文档形成知识体系后再写代码不迟。</strong>减少泛读行为，避免漫无目的的随意浏览技术文章。注重精读，一天一篇不算少，一周一篇也正常。<strong>重阅读质量而非数量，挑选每天安静且不易被打断的时间点来阅读，尽量多啃原版书。</strong></p>
+</blockquote>
+<h2 id="今天的阅读就到这里了-2017-4-5-pm5-22-下次继续更新"><a href="#今天的阅读就到这里了-2017-4-5-pm5-22-下次继续更新" class="headerlink" title="今天的阅读就到这里了 2017-4-5  pm5:22  下次继续更新"></a>今天的阅读就到这里了 2017-4-5  pm5:22  下次继续更新</h2>]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> ReadNotes </tag>
+            
+            <tag> Technology </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[计算机网络复习]]></title>
+      <url>http://yoursite.com/2017/04/05/2017/4/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0/</url>
+      <content type="html"><![CDATA[<p>　网络这块，平时用得比较多，但接触到原理的机会很少，今天在看一篇文章的时候，提到了网络自定义协议地址<a href="http://mrpeak.cn/blog/tcp-rpc-protocol/" target="_blank" rel="external">如何设计一个通讯协议</a>，顺便就把网络这块一起复习一下。虽然之前也复习过，知识嘛！温故而知新。<br><a id="more"></a></p>
+<h2 id="解释图"><a href="#解释图" class="headerlink" title="解释图"></a>解释图</h2><ul>
+<li><p>七层模型（讲得比较详细的一张图）<br><img src="http://img.blog.csdn.net/20140924202143732?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmFpZ29vY24=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+</li>
+<li><p>上图的补充说明<br><img src="http://up.2cto.com/2013/0731/20130731095736383.png" alt=""></p>
+</li>
+</ul>
+<h3 id="七层形象比喻"><a href="#七层形象比喻" class="headerlink" title="七层形象比喻"></a>七层形象比喻</h3><p><img src="http://images2015.cnblogs.com/blog/705728/201604/705728-20160424234824085-667046040.png" alt=""></p>
+<p><strong>整个过程以公司A和公司B的一次商业报价单发送为例子进行讲解。</strong></p>
+<ul>
+<li>1、应用层</li>
+</ul>
+<p>OSI参考模型中最靠近用户的一层，是为计算机用户提供应用接口，也为用户直接提供各种网络服务。我们常见应用层的网络服务协议有：HTTP，HTTPS，FTP，POP3、SMTP等。</p>
+<blockquote>
+<p><strong>实际公司A的老板就是我们所述的用户，而他要发送的商业报价单，就是应用层提供的一种网络服务，当然，老板也可以选择其他服务，比如说，发一份商业合同，发一份询价单，等等。</strong></p>
+</blockquote>
+<ul>
+<li>2、表示层</li>
+</ul>
+<p>表示层提供各种用于应用层数据的编码和转换功能,<strong>确保一个系统的应用层发送的数据能被另一个系统的应用层识别</strong>。如果必要，该层可提供一种标准表示形式，用于将计算机内部的多种数据格式转换成通信中采用的标准表示形式。数据压缩和加密也是表示层可提供的转换功能之一。</p>
+<blockquote>
+<p><strong>由于公司A和公司B是不同国家的公司，他们之间的商定统一用英语作为交流的语言，所以此时表示层（公司的文秘），就是将应用层的传递信息转翻译成英语。同时为了防止别的公司看到，公司A的人也会对这份报价单做一些加密的处理。这就是表示的作用，将应用层的数据转换翻译等。</strong></p>
+</blockquote>
+<ul>
+<li>3、会话层</li>
+</ul>
+<p>会话层就是负责建立、管理和终止表示层实体之间的通信会话。该层的通信由不同设备中的应用程序之间的服务请求和响应组成。      </p>
+<blockquote>
+<p><strong>会话层的同事拿到表示层的同事转换后资料，（会话层的同事类似公司的外联部），会话层的同事那里可能会掌握本公司与其他好多公司的联系方式，这里公司就是实际传递过程中的实体。他们要管理本公司与外界好多公司的联系会话。当接收到表示层的数据后，会话层将会建立并记录本次会话，他首先要找到公司B的地址信息，然后将整份资料放进信封，并写上地址和联系方式。准备将资料寄出。等到确定公司B接收到此份报价单后，此次会话就算结束了，外联部的同事就会终止此次会话。</strong></p>
+</blockquote>
+<ul>
+<li>4、传输层</li>
+</ul>
+<p>传输层建立了主机端到端的链接，传输层的作用是为上层协议提供端到端的可靠和透明的数据传输服务，包括处理差错控制和流量控制等问题。该层向高层屏蔽了下层数据通信的细节，使高层用户看到的只是在两个传输实体间的一条主机到主机的、可由用户控制和设定的、可靠的数据通路。我们通常说的，TCP UDP就是在这一层。端口号既是这里的“端”。</p>
+<blockquote>
+<p><strong>传输层就相当于公司中的负责快递邮件收发的人，公司自己的投递员，他们负责将上一层的要寄出的资料投递到快递公司或邮局。</strong></p>
+</blockquote>
+<ul>
+<li>5、网络层</li>
+</ul>
+<p>本层通过IP寻址来建立两个节点之间的连接，为源端的运输层送来的分组，选择合适的路由和交换节点，正确无误地按照地址传送给目的端的运输层。就是通常说的IP层。这一层就是我们经常说的IP协议层。IP协议是Internet的基础。</p>
+<blockquote>
+<p><strong>网络层就相当于快递公司庞大的快递网络，全国不同的集散中心，比如说，从深圳发往北京的顺丰快递（陆运为例啊，空运好像直接就飞到北京了），首先要到顺丰的深圳集散中心，从深圳集散中心再送到武汉集散中心，从武汉集散中心再寄到北京顺义集散中心。这个每个集散中心，就相当于网络中的一个IP节点。</strong></p>
+</blockquote>
+<ul>
+<li>6、数据链路层 </li>
+</ul>
+<p>将比特组合成字节,再将字节组合成帧,使用链路层地址 (以太网使用MAC地址)来访问介质,并进行差错检测。</p>
+<p>数据链路层又分为2个子层：逻辑链路控制子层（LLC）和媒体访问控制子层（MAC）。</p>
+<blockquote>
+<p>MAC子层处理CSMA/CD算法、数据出错校验、成帧等；LLC子层定义了一些字段使上次协议能共享数据链路层。 在实际使用中，LLC子层并非必需的。</p>
+</blockquote>
+<ul>
+<li>7、物理层     </li>
+</ul>
+<p>实际最终信号的传输是通过物理层实现的。通过物理介质传输比特流。规定了电平、速度和电缆针脚。常用设备有（各种物理设备）集线器、中继器、调制解调器、网线、双绞线、同轴电缆。这些都是物理层的传输介质。</p>
+<blockquote>
+<p><strong>快递寄送过程中的交通工具，就相当于我们的物理层，例如汽车，火车，飞机，船。</strong></p>
+</blockquote>
+<h3 id="TCP-IP五层模型"><a href="#TCP-IP五层模型" class="headerlink" title="TCP/IP五层模型"></a>TCP/IP五层模型</h3><ul>
+<li>七层与五层的关系</li>
+</ul>
+<p><img src="http://images2015.cnblogs.com/blog/705728/201604/705728-20160424234825491-384470376.png" alt=""></p>
+<ul>
+<li>对应协议及硬件<br><img src="http://images2015.cnblogs.com/blog/705728/201604/705728-20160424234827195-1493107425.png" alt=""><br><img src="http://images2015.cnblogs.com/blog/705728/201604/705728-20160424234826351-1957282396.png" alt=""></li>
+</ul>
+<h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><p><img src="http://upload-images.jianshu.io/upload_images/3346554-0f81660c9f0659c8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><h3 id="Http状态码"><a href="#Http状态码" class="headerlink" title="Http状态码"></a>Http状态码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">200 OK 客户端请求成功</div><div class="line">301 Moved Permanently 请求永久重定向</div><div class="line">302 Moved Temporarily 请求临时重定向</div><div class="line">304 Not Modified 文件未修改，可以直接使用缓存的文件。</div><div class="line">400 Bad Request 由于客户端请求有语法错误，不能被服务器所理解。</div><div class="line">401 Unauthorized 请求未经授权。这个状态代码必须和WWW-Authenticate报头域一起使用</div><div class="line">403 Forbidden 服务器收到请求，但是拒绝提供服务。服务器通常会在响应正文中给出不提供服务的原因</div><div class="line">404 Not Found 请求的资源不存在，例如，输入了错误的URL</div><div class="line">500 Internal Server Error 服务器发生不可预期的错误，导致无法完成客户端的请求。</div><div class="line">503 Service Unavailable 服务器当前不能够处理客户端的请求，在一段时间之后，服务器可能会恢复正常。</div></pre></td></tr></table></figure>
+<p>在Internet中所有的传输都是通过TCP/IP进行的。HTTP协议作为TCP/IP模型中应用层的协议也不例外。HTTP协议通常承载于TCP协议之上，有时也承载于TLS或SSL协议层之上，这个时候，就成了我们常说的HTTPS。<br><img src="http://images.cnitblog.com/i/116165/201407/111703047392802.png" alt=""></p>
+<p><strong>HTTP默认的端口号为80，HTTPS的端口号为443。</strong></p>
+<h3 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h3><p>HTTP定义了与服务器交互的不同方法，最基本的方法有4种，分别是GET，POST，PUT，DELETE。URL全称是资源描述符，我们可以这样认为：一个URL地址，它用于描述一个网络上的资源，而 HTTP 中的GET，POST，PUT，DELETE就对应着对这个资源的查，改，增，删4个操作。</p>
+<h3 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h3><ul>
+<li><p>无状态：HTTP协议是无状态协议。<strong>无状态是指协议对于事务处理没有记忆能力。</strong>缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大</p>
+</li>
+<li><p>HTTP协议是无状态的和Connection: keep-alive的区别：</p>
+<ul>
+<li>无状态是指协议对于事务处理没有记忆能力，服务器不知道客户端是什么状态。从另一方面讲，打开一个服务器上的网页和你之前打开这个服务器上的网页之间没有任何联系。<br>HTTP是一个无状态的面向连接的协议，<strong>无状态不代表HTTP不能保持TCP连接，更不能代表HTTP使用的是UDP协议（无连接）。</strong></li>
+<li>从HTTP/1.1起，默认都开启了Keep-Alive，保持连接特性，简单地说，当一个网页打开完成后，客户端和服务器之间用于传输HTTP数据的TCP连接不会关闭，如果客户端再次访问这个服务器上的网页，会继续使用这一条已经建立的连接。</li>
+<li>Keep-Alive不会永久保持连接，它有一个保持时间，可以在不同的服务器软件（如Apache）中设定这个时间。</li>
+</ul>
+</li>
+</ul>
+<h4 id="请求信息"><a href="#请求信息" class="headerlink" title="请求信息"></a>请求信息</h4><p>三个部分分别是：<strong>请求行、消息报头（请求头）、请求正文。</strong></p>
+<ul>
+<li>请求行，例如GET /images/logo.gif HTTP/1.1，表示从/images目录下请求logo.gif这个文件。</li>
+<li>请求头，例如Accept-Language: en</li>
+<li>空行</li>
+<li>可选的消息体　请求行和标题必须以<cr><lf>作为结尾（也就是，回车然后换行）。空行内必须只有<cr><lf>而无其他空格。在HTTP/1.1协议中，所有的请求头，除post外，都是可选的。</lf></cr></lf></cr></li>
+</ul>
+<p><img src="http://images.cnitblog.com/i/116165/201407/121712545823346.png" alt=""></p>
+<ul>
+<li>GET和POST的区别：<ul>
+<li>1、GET提交的数据会放在URL之后，以?分割URL和传输数据，参数之间以&amp;相连，如EditPosts.aspx?name=test1&amp;id=123456. POST方法是把提交的数据放在HTTP包的Body中。</li>
+<li>2、GET提交的数据大小有限制，最多只能有1024字节（因为浏览器对URL的长度有限制），而POST方法提交的数据没有限制。</li>
+<li>3、GET方式需要使用Request.QueryString来取得变量的值，而POST方式通过Request.Form来获取变量的值。</li>
+<li>4、GET方式提交数据，会带来安全问题，比如一个登录页面，通过GET方式提交数据时，用户名和密码将出现在URL上，如果页面可以被缓存或者其他人可以访问这台机器，就可以从历史记录获得该用户的账号和密码。</li>
+</ul>
+</li>
+</ul>
+<h4 id="响应消息"><a href="#响应消息" class="headerlink" title="响应消息"></a>响应消息</h4><p>三个部分分别是：<strong>状态行、消息报头、响应正文。</strong><br><img src="http://images.cnitblog.com/i/116165/201407/121720098646366.png" alt=""></p>
+<p><img src="http://images.cnitblog.com/i/116165/201407/111156110203396.png" alt=""></p>
+<p><img src="http://images.cnitblog.com/i/116165/201407/121724042548791.png" alt=""></p>
+<h4 id="解决HTTP无状态的问题"><a href="#解决HTTP无状态的问题" class="headerlink" title="解决HTTP无状态的问题"></a>解决HTTP无状态的问题</h4><ul>
+<li><p>通过Cookies保存状态信息</p>
+<p><img src="http://images.cnitblog.com/i/116165/201407/122123269892896.png" alt=""></p>
+</li>
+<li>通过Session保存状态信息</li>
+<li>URL重写（通过QueryString保持状态）：URL(统一资源定位符)是Web上特定页面的地址，URL重写的技术就是在URL结尾添加一个附加数据以标识该会话,把会话ID通过URL的信息传递过去，以便在服务器端进行识别不同的用户。</li>
+<li>隐藏表单域：将会话ID添加到HTML表单元素中提交到服务器，此表单元素并不在客户端显示</li>
+</ul>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>三次握手与四次握手</p>
+<p><img src="http://swiftlet.net/wp-content/themes/swiftlet/page-images/tcp/tcp.jpg" alt=""></p>
+<p>断开连接端可以是Client端，也可以是Server端。</p>
+<ul>
+<li>1.假设Client端发起中断连接请求，就先发送FIN报文。<ul>
+<li>1.2.Server端接到FIN报文后，但是如果还有数据没有发送完成，则不必急着关闭Socket，可以继续发送数据。所以服务器端先发送ACK，告诉Client端：请求已经收到了，但是我还没准备好，请继续等待停止的消息。</li>
+</ul>
+</li>
+<li>2.这个时候Client端就进入FIN_WAIT状态，继续等待Server端的FIN报文。</li>
+<li>3.当Server端确定数据已发送完成，则向Client端发送FIN报文，告诉Client端：服务器这边数据发完了，准备好关闭连接了。</li>
+<li>4.Client端收到FIN报文后，就知道可以关闭连接了，但是他还是不相信网络，所以发送ACK后进入TIME_WAIT状态， Server端收到ACK后，就知道可以断开连接了。Client端等待了2MSL后依然没有收到回复，则证明Server端已正常关闭，最后，Client端也可以关闭连接了至此，TCP连接就已经完全关闭了！关闭连接的过程如下图所示：</li>
+</ul>
+<p><img src="http://swiftlet.net/wp-content/themes/swiftlet/page-images/tcp/duankai.jpg" alt=""></p>
+<h3 id="SYN攻击"><a href="#SYN攻击" class="headerlink" title="SYN攻击"></a>SYN攻击</h3><p>SYN 攻击指的是，攻击客户端在短时间内伪造大量不存在的IP地址，向服务器不断地发送SYN包，服务器回复确认包，并等待客户的确认。由于源地址是不存在的，服务器需要不断的重发直至超时，这些伪造的SYN包将长时间占用未连接队列，正常的SYN请求被丢弃，导致目标系统运行缓慢，严重者会引起网络堵塞甚至系统瘫痪。</p>
+<ul>
+<li><p>如何防御 SYN 攻击？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> 缩短超时（SYN Timeout）时间</div><div class="line">增加最大半连接数</div><div class="line">过滤网关防护</div><div class="line">SYN cookies技术</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h2><p>IP地址分类</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IP class</th>
+<th style="text-align:center">From</th>
+<th style="text-align:center">To</th>
+<th style="text-align:center">Subnet Mask</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center">1.0.0.0</td>
+<td style="text-align:center">126.255.255.255</td>
+<td style="text-align:center">255.0.0.0</td>
+</tr>
+<tr>
+<td style="text-align:center">B</td>
+<td style="text-align:center">128.0.0.0</td>
+<td style="text-align:center">191.255.255.255</td>
+<td style="text-align:center">255.255.0.0</td>
+</tr>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">192.0.0.0</td>
+<td style="text-align:center">223.255.255.255</td>
+<td style="text-align:center">255.255.255.0</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>每个IP地址的32位分为前后两部分，<strong>第一部分用来区分局域网，第二个部分用来区分该局域网的主机。</strong>子网掩码(Subnet Mask)告诉我们这两部分的分界线，比如255.0.0.0(也就是8个1和24个0)表示前8位用于区分局域网，后24位用于区分主机。由于A、B、C分类是已经规定好的，所以当一个IP地址属于B类范围时，我们就知道它的前16位和后16位分别表示局域网和主机。</p>
+</blockquote>
+<p>IP地址实际上识别的是网卡(NIC, Network Interface Card)。网卡是计算机的一个硬件，它在接收到网路信息之后，将信息交给计算机(处理器/内存)。当计算机需要发送信息的时候，也要通过网卡发送。一台计算机可以有不只一个网卡，比如笔记本就有一个以太网卡和一个WiFi网卡。计算机在接收或者发送信息的时候，要先决定想要通过哪个网卡。</p>
+<h2 id="Soket"><a href="#Soket" class="headerlink" title="Soket"></a>Soket</h2><blockquote>
+<p>Socket 是对 TCP/IP 协议族的一种封装，是应用层与TCP/IP协议族通信的中间软件抽象层。从设计模式的角度看来，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Socket 起源于 Unix ，Unix/Linux 基本哲学之一就是“一切皆文件”，都可以用“打开(open) –&gt; 读写(write/read) –&gt; 关闭(close)”模式来进行操作。因此 Socket 也被处理为一种特殊的文件。</div></pre></td></tr></table></figure>
+<p>之前写过一篇关于Soket相关的文章。这里就不在重复了。<a href="http://www.jianshu.com/p/c7a5fd48dcd6" target="_blank" rel="external">Soket复习</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><p>七层模型</p>
+<ul>
+<li><p><a href="http://www.cnblogs.com/qishui/p/5428938.html" target="_blank" rel="external">OSI七层模型与TCP/IP五层模型</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/yaopeng_2005/article/details/7064869" target="_blank" rel="external">OSI七层模型详解</a></p>
+</li>
+</ul>
+</li>
+<li><p>HTTP</p>
+<ul>
+<li><p><a href="http://www.cnblogs.com/EricaMIN1987_IT/p/3837436.html" target="_blank" rel="external">HTTP协议详解</a></p>
+</li>
+<li><p><a href="https://hit-alibaba.github.io/interview/basic/network/HTTP.html" target="_blank" rel="external">HTTP的特性</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">HTTP 协议入门</a></p>
+</li>
+<li><p><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386832653051fd44e44e4f9e4ed08f3e5a5ab550358d000" target="_blank" rel="external">HTTP协议简介</a></p>
+</li>
+</ul>
+</li>
+<li><p>IP</p>
+<ul>
+<li><a href="http://www.cnblogs.com/vamei/archive/2012/11/30/2794917.html" target="_blank" rel="external">IP接力赛 (IP, ARP, RIP和BGP协议)</a></li>
+<li><a href="http://www.cnblogs.com/vamei/archive/2012/12/02/2796988.html" target="_blank" rel="external">IP协议详解</a></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> Recover </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> net </tag>
+            
+            <tag> computer </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Andriod SDK Version及API Level]]></title>
+      <url>http://yoursite.com/2017/04/01/2017/3/AndroidSDKVersion%E7%AE%80%E4%BB%8B%E5%8F%8A%E9%99%8D%E4%BD%8EAPILevel/</url>
+      <content type="html"><![CDATA[<p>　抽空打开了Android Studio准备研究一下开源项目代码，没想到运行不了。总的来说还是自己对Android开发不是太熟，这里简单总结一下遇到的一些坑！<br><a id="more"></a></p>
+<h2 id="SDK-Version简单介绍"><a href="#SDK-Version简单介绍" class="headerlink" title="SDK Version简单介绍"></a>SDK Version简单介绍</h2><p>一切源于向前兼容，用户在升级到新版 Android 的时候，用以前版本的 SDK 构建的应用不会出问题。这就是 compileSdkVersion, minSdkVersion 和 targetSdkVersion 的作用：他们分别控制可以使用哪些 API ，要求的 API 级别是什么，以及应用的兼容模式。</p>
+<h3 id="Compile-Sdk-Version"><a href="#Compile-Sdk-Version" class="headerlink" title="Compile Sdk Version"></a>Compile Sdk Version</h3><p>compileSdkVersion 告诉 Gradle 用哪个 Android SDK 版本编译你的应用。使用任何新添加的 API 就需要使用对应 Level 的 Android SDK。</p>
+<p>修改 compileSdkVersion 不会改变运行时的行为。当你修改了 compileSdkVersion 的时候，可能会出现新的编译警告、编译错误，但新的 compileSdkVersion 不会被包含到 APK 中：它纯粹只是在编译的时候使用。</p>
+<p>在开发中最常见的就是总是使用最新的 SDK 进行编译。在现有代码上使用新的编译检查可以获得很多好处，避免新弃用的 API ，并且为使用新的 API 做好准备。Android Stuido默认是用最新的，所以一般不怎么改compileSdkVersion。</p>
+<h3 id="Min-Sdk-Version"><a href="#Min-Sdk-Version" class="headerlink" title="Min Sdk Version"></a>Min Sdk Version</h3><p>如果 compileSdkVersion 设置为可用的最新 API，那么 minSdkVersion 则是应用可以运行的最低要求。minSdkVersion 是 Google Play 商店用来判断用户设备是否可以安装某个应用的标志之一。</p>
+<p>在开发时 minSdkVersion 也起到一个重要角色：lint 默认会在项目中运行，<strong>它在你使用了高于 minSdkVersion  的 API 时会警告你，帮你避免调用不存在的 API 的运行时问题。</strong>如果只在较高版本的系统上才使用某些 API，通常使用运行时检查系统版本的方式解决。</p>
+<p><strong>注意：当使用第三方库可能有他们自己的 minSdkVersion 。你的应用设置的 minSdkVersion 必需大于等于这些库的 minSdkVersion 。</strong></p>
+<h3 id="Target-Sdk-Version"><a href="#Target-Sdk-Version" class="headerlink" title="Target Sdk Version"></a>Target Sdk Version</h3><p>targetSdkVersion 是 Android 提供向前兼容的主要依据，在应用的 targetSdkVersion 没有更新之前系统不会应用最新的API变化。这允许你在适应新的API变化之前就可以使用新的 API。</p>
+<h3 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h3><p>三者需要满足<code>minSdkVersion &lt;= targetSdkVersion &lt;= compileSdkVersion</code>。但是最为理想的状态应该是<code>minSdkVersion (lowest possible) &lt;=  targetSdkVersion == compileSdkVersion (latest SDK)</code>用较低的 minSdkVersion 来覆盖最大的人群，用最新的 SDK 设置 target 和 compile 来获得最好的外观和行为。</p>
+<h2 id="API-Level-与-Version"><a href="#API-Level-与-Version" class="headerlink" title="API Level  与 Version"></a>API Level  与 Version</h2><p>有了上面的基础知识，于是为了学习更为牛逼的代码，于是去GitHub上下载了几个项目的源码。一切都没问题，在连上真机的时候突然报错。提示：<img src="http://upload-images.jianshu.io/upload_images/664334-3cdba0423c0ef161.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">。</p>
+<p>于是瞎捣鼓了一下才明白，原来每一个Android版本对应一个API  level。报错的原因就是真机的系统版本低于项目设定的版本。</p>
+<p>在官网上找到了一张图标，能够彻底说明这个问题。<a href="http://source.android.com/source/build-numbers.html" target="_blank" rel="external">Codenames, Tags, and Build Numbers</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-c290eec12f54f4af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="降低API-Level"><a href="#降低API-Level" class="headerlink" title="降低API Level"></a>降低API Level</h3><p>为了让项目在真机上运行起来，不得不降低项目的API level。<strong>虽然我这里报错是minSDK,但我这里演示的是所有更改所有sdk，比如comiple,target,misdk的情况。具体更改根据报错信息修改对应的选项即可。</strong></p>
+<p>这里有两种方式解决。</p>
+<ol>
+<li>图形化操作<ul>
+<li>1.1 修改 compile Sdk Version<br>  <img src="http://upload-images.jianshu.io/upload_images/664334-7cb1d57138e8cf19.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+<li>1.2 修改Target Sdk Version<br>  <img src="http://upload-images.jianshu.io/upload_images/664334-f3332ccd2e6ba093.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+<li>1.3修改完之后，IDE会自动修改build.grade的内容。<br>  <img src="http://upload-images.jianshu.io/upload_images/664334-bcb9adf7bab225fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+</ul>
+</li>
+</ol>
+<ol>
+<li>修改build.gradle：上面提到的这些sdk内容，全部在build.gradle文件里找到。我们可以直接修改相应的内容即可。比如：<br> <img src="http://upload-images.jianshu.io/upload_images/664334-3cd0cfd5755f9a5b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>由较高的API Level转至较低的API Level，有时候会出现兼容上的问题。比如较低版本的API Level不支持某些特性。</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="https://medium.com/google-developers/picking-your-compilesdkversion-minsdkversion-targetsdkversion-a098a0341ebd" target="_blank" rel="external">Picking your compileSdkVersion, minSdkVersion, and targetSdkVersion</a></p>
+<p><a href="http://chinagdg.org/2016/01/picking-your-compilesdkversion-minsdkversion-targetsdkversion/" target="_blank" rel="external">如何选择 compileSdkVersion, minSdkVersion 和 targetSdkVersion</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Android </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Android </tag>
+            
+            <tag> SDK </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Blog重头开始]]></title>
+      <url>http://yoursite.com/2017/03/31/2017/3/Blog%E9%87%8D%E5%A4%B4%E5%BC%80%E5%A7%8B/</url>
+      <content type="html"><![CDATA[<p>　自从上次博客从hexo+github迁移到简书后，再也没有捣鼓相关的内容了。今天无意中看到了hexo的主题<a href="https://material.viosey.com/" target="_blank" rel="external">Material Theme</a>，再次燃起兴趣……<br><a id="more"></a></p>
+<h2 id="重头开始"><a href="#重头开始" class="headerlink" title="重头开始"></a>重头开始</h2><p>这里完全重头搭建一个gitpage+Hexo的静态博客。所以看完这篇文章之后，你完全可以自己弄一个玩一玩。虽然这些内容完全可以通过官网全部找到，这里也就相当于一个总结吧！</p>
+<h2 id="一切源头"><a href="#一切源头" class="headerlink" title="一切源头"></a>一切源头</h2><p><a href="https://github.com/" target="_blank" rel="external">GitHub</a></p>
+<ul>
+<li>Node.js<ul>
+<li><a href="https://github.com/nodejs/node" target="_blank" rel="external">Node.js GitHub地址</a></li>
+<li><a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js 文档</a></li>
+</ul>
+</li>
+<li>Hexo<ul>
+<li><a href="https://github.com/hexojs/hexo" target="_blank" rel="external">Hexo GitHub 地址</a></li>
+<li><a href="https://hexo.io/" target="_blank" rel="external">Hexo 文档</a></li>
+<li><a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo 中文文档</a></li>
+</ul>
+</li>
+<li>Git<ul>
+<li><a href="https://github.com/git/git" target="_blank" rel="external">Git GitHub 地址</a></li>
+<li><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="external">Git 使用教程- 这里推荐中版</a></li>
+</ul>
+</li>
+<li>Hexo Theme<ul>
+<li><a href="https://github.com/viosey/hexo-theme-material" target="_blank" rel="external">hexo-theme-material GitHub 地址</a></li>
+<li><a href="https://material.viosey.com/" target="_blank" rel="external">material 主题文档</a></li>
+</ul>
+</li>
+</ul>
+<p>一下操作步骤，其实在上面的文档中能够全部找到。目前网上流传所谓的教程其实最开始也是从这些官方文档获得的。<strong>所以如果时间充裕，最好从官方文档入手！</strong></p>
+<h2 id="安装node"><a href="#安装node" class="headerlink" title="安装node"></a>安装node</h2><p>直接打开官方地址<a href="https://nodejs.org/en/" target="_blank" rel="external">node</a>，下载安装包即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-450f0bf96d56c348.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="解决国内NPM慢"><a href="#解决国内NPM慢" class="headerlink" title="解决国内NPM慢"></a>解决国内NPM慢</h3><p><a href="http://blog.csdn.net/rongbo_j/article/details/52106580" target="_blank" rel="external">解决国内NPM安装依赖速度慢问题</a></p>
+<p>只生效一次：<code>npm install -gd express --registry=http://registry.npm.taobao.org</code><br>永久生效：<code>npm config set registry http://registry.npm.taobao.org</code></p>
+<h4 id="cnpm"><a href="#cnpm" class="headerlink" title="cnpm"></a>cnpm</h4><p>由于npm插件在国外所有很慢，换成cnpm会快很多。详情可以看<a href="http://npm.taobao.org/" target="_blank" rel="external">http://npm.taobao.org/</a></p>
+<p>小白请看<a href="http://blog.csdn.net/zhangwenwu2/article/details/52778521" target="_blank" rel="external">npm用法以及更换到淘宝镜像的方法</a></p>
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>同样打开官方地址<a href="https://hexo.io/" target="_blank" rel="external">hexo</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-7906f95f92b239fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在终端执行其中的命令即可。</p>
+<h2 id="登录GitHub创建项目"><a href="#登录GitHub创建项目" class="headerlink" title="登录GitHub创建项目"></a>登录GitHub创建项目</h2><p><img src="http://upload-images.jianshu.io/upload_images/664334-f50d3d356a202614.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>填写项目名，<strong>这里一定要注意项目名称需要用用户名+github.io结尾</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-41acbd8d7acb0b4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>创建完成之后拖到下面会有关于gitpage的介绍。选择个主题再返回就启用了。<br><img src="http://upload-images.jianshu.io/upload_images/664334-6ff6d02ebe0a17ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来的事情就是将Hexo生成的静态页面push到这个仓库中就可以了。然后访问提示的这个链接就可以看到内容。</p>
+<h2 id="自动发布到GitHub"><a href="#自动发布到GitHub" class="headerlink" title="自动发布到GitHub"></a>自动发布到GitHub</h2><p>虽然经过上面的不走，勉勉强强能写点东西并且能够发布了。但是还有很多事情需要做，比如：</p>
+<ol>
+<li>主题的选择，一般情况下hexo的默认主题不会让你满意。</li>
+<li>自动部署，每次写了新的文章都用git命令操作一遍，很费时间。</li>
+<li>添加一些本地或者google搜索。</li>
+<li>支持评论等</li>
+<li>……</li>
+</ol>
+<p>上面的3、4、5在选用三方主题的时候基本上简单配置一下就可以的。所以不难。</p>
+<p><strong>自动部署在官方文档中也用说明。<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="external">自动部署中文版</a></strong></p>
+<ul>
+<li>安装<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external"> hexo-deployer-git</a>：<ul>
+<li>在当前hexo生成的目录下执行：<code>npm install hexo-deployer-git --save</code></li>
+</ul>
+</li>
+<li><p>配置deploy内容：比如我这样设置的</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line"> type: git</div><div class="line"> repo: git@github.com:****/***.github.io.git</div><div class="line"> branch: master</div></pre></td></tr></table></figure>
+<p>这里repo后面的内容可以直接复制你仓库中的地址：<br><img src="http://upload-images.jianshu.io/upload_images/664334-3bc95bffac2f1955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ul>
+<h3 id="给github账号添加ssh"><a href="#给github账号添加ssh" class="headerlink" title="给github账号添加ssh"></a>给github账号添加ssh</h3><p>经过上面的过程依然还不能push到仓库，还没设置ssh。如果你执行了<code>hexo  d</code>会报403的错误。</p>
+<p>设置Github的用户名和邮箱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config --global user.name &quot;你在Github上的昵称&quot;</div><div class="line">git config --global user.email &quot;你在Github上的邮箱&quot;</div></pre></td></tr></table></figure>
+<p>这里是全局设置的用户账号，考虑到某些仓库不能用这个账号，可以具体的仓库中使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config user.name &quot;用户名&quot; </div><div class="line">git config user.email &quot;邮箱&quot;</div></pre></td></tr></table></figure>
+<p>设置</p>
+<h3 id="公钥私钥"><a href="#公钥私钥" class="headerlink" title="公钥私钥"></a>公钥私钥</h3><p>接下来就是生产公钥私钥：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -C &quot;你在Github上的邮箱&quot;</div><div class="line">// 多账号情况下：（多个git使用）</div><div class="line">ssh-keygen -t rsa -f ~/.ssh/名称 -C &quot;邮箱&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li>-t 指定密钥类型，默认是 rsa ，可以省略。</li>
+<li>-f 指定密钥文件存储文件名。</li>
+</ul>
+<p>添加密钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-add id_rsa</div></pre></td></tr></table></figure>
+<p>执行后，会填写保存两种密钥的文件夹，和passphrase。这里是指的密码尽量简单点，因为后面会在添加私钥的时候用到。<strong>全部可以按enter。然后执行ls来查看生成后的文件。</strong></p>
+<ul>
+<li>id_rsa和id_rsa.pub分别是私有密钥和公有密钥。</li>
+<li>我们指定的文件名就是id_rsa.github，这时~/.ssh目录下会多出id_rsa.github和id_rsa.github.pub两个文件，id_rsa.github里保存的就是我们要使用的key。</li>
+</ul>
+<h3 id="有多个git账号怎么办（常见问题）"><a href="#有多个git账号怎么办（常见问题）" class="headerlink" title="有多个git账号怎么办（常见问题）"></a>有多个git账号怎么办（常见问题）</h3><ul>
+<li>创建：touch ~/.ssh/config</li>
+<li><p>添加内容：例如</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">	#gitlab</div><div class="line">Host ****</div><div class="line">HostName ****</div><div class="line">RSAAuthentication yes</div><div class="line">IdentityFile ~./ssh/id_rsa_gitlab</div><div class="line">#github</div><div class="line">Host****</div><div class="line">HostName ****</div><div class="line">RSAAuthentication yes</div><div class="line">User ****</div><div class="line">IdentityFile ~./ssh/github_id_rsa</div><div class="line">#github</div><div class="line">Host github</div><div class="line">HostName github.com</div><div class="line">RSAAuthentication yes</div><div class="line">User 你的登录邮箱</div><div class="line">IdentityFile ~./ssh/github_id_rsa</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="添加公钥到github账号ssh"><a href="#添加公钥到github账号ssh" class="headerlink" title="添加公钥到github账号ssh"></a>添加公钥到github账号ssh</h3><ul>
+<li>打开github账号的设置界面</li>
+<li>新建一个SSH Key</li>
+</ul>
+<p>然后将打开公钥文件，把内容粘贴到<br><img src="http://upload-images.jianshu.io/upload_images/664334-cf6211149269298f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>测试是否成功<code>ssh -T git@github.com</code></p>
+<p>如果显示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Are you sure you want to continue connecting (yes/no)?</div></pre></td></tr></table></figure>
+<p>输入yes。<br>然后就可以看到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hi yourusername! You&apos;ve successfully authenticated, but GitHub does not</div><div class="line">provide shell access.</div></pre></td></tr></table></figure>
+<h2 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h2><p>这部分看着文档走就可以了，没什么难度。当然第一次创建一个比较有感觉的博客还是需要花一些时间的。这里我大致弄了一个模板。如果嫌麻烦可以直接用这个项目生成。地址<a href="https://github.com/ZhiJianShuSheng/BlogRecord" target="_blank" rel="external">后期补上</a></p>
+<h2 id="THE-END"><a href="#THE-END" class="headerlink" title="THE END"></a>THE END</h2><h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="http://www.jianshu.com/p/0d7038102cd6" target="_blank" rel="external">生成ssh公钥并连接到github</a><br><a href="http://blog.csdn.net/diamont1001/article/details/51822803" target="_blank" rel="external">Mac里添加多个git ssh</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Blog </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Git </tag>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
+</search>

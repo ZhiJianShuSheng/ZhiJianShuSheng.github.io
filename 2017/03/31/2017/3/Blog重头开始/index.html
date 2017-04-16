@@ -10,6 +10,8 @@
     
     <title>
         
+            Blog重头开始 | 
+        
         纸简书生
     </title>
 
@@ -46,7 +48,7 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="纸简书生">
+    <meta property="og:title" content="Blog重头开始 | 纸简书生">
     <meta property="og:description" content="人与人之间的差别在于，一、想得到和想不到，二、想得到且做到的想到但做不到；离开舒适区、自律是方法论。写作，阅读、锻炼、早起、旅行是方法。牢记方法论、价值观，躬行方法，让自己更好！">
 
     <!--[if lte IE 9]>
@@ -195,6 +197,41 @@
 
                     <!-- Post TOC -->
 
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#重头开始"><span class="post-toc-number">1.</span> <span class="post-toc-text">重头开始</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一切源头"><span class="post-toc-number">2.</span> <span class="post-toc-text">一切源头</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装node"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装node</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解决国内NPM慢"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">解决国内NPM慢</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#cnpm"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">cnpm</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装Hexo"><span class="post-toc-number">4.</span> <span class="post-toc-text">安装Hexo</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#登录GitHub创建项目"><span class="post-toc-number">5.</span> <span class="post-toc-text">登录GitHub创建项目</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#自动发布到GitHub"><span class="post-toc-number">6.</span> <span class="post-toc-text">自动发布到GitHub</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#给github账号添加ssh"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">给github账号添加ssh</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#公钥私钥"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">公钥私钥</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#有多个git账号怎么办（常见问题）"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">有多个git账号怎么办（常见问题）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#添加公钥到github账号ssh"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">添加公钥到github账号ssh</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#设置主题"><span class="post-toc-number">7.</span> <span class="post-toc-text">设置主题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#THE-END"><span class="post-toc-number">8.</span> <span class="post-toc-text">THE END</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展阅读"><span class="post-toc-number">9.</span> <span class="post-toc-text">扩展阅读</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
 
 <!-- Layouts -->
 
@@ -208,19 +245,11 @@
                 
     <!-- Paradox Post Header -->
     
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-            <script>
-    var randomNum = Math.floor(Math.random() * 19 + 1);
-
-    $('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')');
-</script>
-
-        
+        <!-- Custom Thumbnail -->
+        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50" style="background-image:url(http://upload-images.jianshu.io/upload_images/664334-6a635025e0c104d7.png)">
     
             <p class="article-headline-p">
-                
+                Blog重头开始
             </p>
         </div>
 
@@ -239,7 +268,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>纸简书生</strong>
-        <span>4月 13, 2017</span>
+        <span>3月 31, 2017</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -263,7 +292,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        
+        <a class="post_tag-link" href="/tags/Git/">Git</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/Hexo/">Hexo</a>
     </ul>
     
 
@@ -279,7 +308,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=&url=http://yoursite.com//about/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Blog重头开始&url=http://yoursite.com//2017/03/31/2017/3/Blog重头开始/index.html&pic=&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -312,124 +341,104 @@
                 <!-- Post Content -->
                 <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        
-<!doctype html>
-
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=1024">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>关于我 | 纸简书生</title>
-    
-    <meta name="description" content="I am weslywxl, a iOS、Android、java programmer from China and working HangZhou.">
-    <meta name="author" content="纸简书生">
-
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet">
-
-    <link href="css/aboutme.css" rel="stylesheet">
-    <link rel="shortcut icon" href="favicon.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <base target="_blank">
-</head>
-
-<body class="impress-not-supported">
-
-<div class="fallback-message">
-    <p>您的浏览器 <b>不支持</b> impress.js的展示要求, 将为您呈现简化版的展示</p>
-    <p>为了获取最佳效果，请使用最新版的<b>Chrome</b>, <b>Safari</b> 或 <b>Firefox</b> 浏览器</p>
-    <p>珍爱生命，保护地球，远离IE。</p>
-</div>
-
-
-<div id="impress">
-    <div id="welcome" class="step" data-x="-2000" data-y="-2500">
-        <p>欢迎来到</p>
-        <p><span class="title"><b>纸简书生</b></span></p>
-        <p><span class="footnote">我叫<span class="name">王小龙</span>，这里是我的新巢</span></p>
-    </div>
-
-    <div id="me" class="step" data-x="0" data-y="-2500">
-        <b class="now_me">现在的我：</b>
-        <ul>
-            <li><b class="unity">职业 iOS、Android、Java 开发者</b></li>
-            <li><b class="ios">业余瞎写作者</b></li>
-            <li><b class="photo">业余健身爱好者</b></li>
-        </ul>
-    </div>
-
- 
-
-    <div id="world" class="step" data-x="-100" data-y="2900" data-z="900" data-rotate="-90" data-scale="5">
-        <p>有时候会觉得，世界真的很小</p>
-    </div>
-
-    <div id="meet" class="step" data-x="1300" data-y="6000" data-z="2400" data-scale="6">
-        <p>也许我们就在某时某地</p>
-        <p>曾经擦肩而过</p>
-        <p>而你我，却浑然不觉</p>
-    </div>
-
-    <div id="tiny" class="step" data-x="1300" data-y="6000" data-z="-3000" data-rotate="300" data-scale="1">
-        <p>但是</p>
-    </div>
-
-    <div id="comein" class="step" data-x="0" data-y="7000" data-z="-3000" data-rotate="300">
-        <p>从此刻开始</p>
-        <p>我们的生活便有了<b>交集</b></p>
-    </div>
-
-    <div id="mywords" class="step" data-x="4500" data-y="3500" data-z="3000" data-rotate="160">
-        <p>也许您在这里能看到的只是</p>
-        <p>中国千千万万工科生之中最普通的一员</p>
-        <p>所写下的最蹩足的文字</p>
-    </div>
-
-    <div id="grow" class="step" data-x="3500" data-y="-850" data-z="3000" data-rotate="270" data-scale="6">
-        <p>但我相信它们真实地记载了</p>
-        <p><b>我的生活，我的成长</b></p>
-    </div>
-
-    <div id="knowme" class="step" data-x="-6000" data-y="-800" data-z="0" data-rotate="0" data-scale="1">
-        <p>正如</p>
-        <p>伯乐得见绝世好马，子期终遇伯牙佳音</p>
-    </div>
-
-    <div id="prizeme" class="step" data-x="-6000" data-y="-500" data-z="-500" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
-        <p><span class="horse">良驹美景，</span> <span class="moutain">高山流水，</span> <span class="hope">我真心希望</span> <span class="youare">您就是</span> <span class="my">我的伯乐，我的子期</span> <b></b></p>
-    </div>
-
-
-    <div id="one-more-thing" class="step" data-x="-1500" data-y="-1100" data-z="0" data-scale="2">
-        <p>One More Thing</p>
-        <p>其实是一句话，想分享给您</p>
-    </div>
-
-    <div id="motto" class="step" data-x="0" data-y="1500" data-z="6000" data-scale="5">
-        <p>不论您走到哪儿，在做什么</p>
-        <p>都请勿忘初心 请记住</p>
-        <p><b>上善若水，人淡如菊</b></p>
-    </div>
-
-    <div id="back" class="step" data-x="-6000" data-y="5200" data-scale="2">
-        <p>谢谢您的来访 ！</p>
-    </div>
-</div>
-
-<div class="hint">
-    <p>使用空格或方向键继续</p>
-</div>
-<script>
-if ("ontouchstart" in document.documentElement) { 
-    document.querySelector(".hint").innerHTML = "<p>在左侧或右侧点击继续</p>";
-}
-</script>
-
-<script src="js/impress.js"></script>
-<script>impress().init();</script>
-
-</body>
-</html>
+        <p>　自从上次博客从hexo+github迁移到简书后，再也没有捣鼓相关的内容了。今天无意中看到了hexo的主题<a href="https://material.viosey.com/" target="_blank" rel="external">Material Theme</a>，再次燃起兴趣……<br><a id="more"></a></p>
+<h2 id="重头开始"><a href="#重头开始" class="headerlink" title="重头开始"></a>重头开始</h2><p>这里完全重头搭建一个gitpage+Hexo的静态博客。所以看完这篇文章之后，你完全可以自己弄一个玩一玩。虽然这些内容完全可以通过官网全部找到，这里也就相当于一个总结吧！</p>
+<h2 id="一切源头"><a href="#一切源头" class="headerlink" title="一切源头"></a>一切源头</h2><p><a href="https://github.com/" target="_blank" rel="external">GitHub</a></p>
+<ul>
+<li>Node.js<ul>
+<li><a href="https://github.com/nodejs/node" target="_blank" rel="external">Node.js GitHub地址</a></li>
+<li><a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js 文档</a></li>
+</ul>
+</li>
+<li>Hexo<ul>
+<li><a href="https://github.com/hexojs/hexo" target="_blank" rel="external">Hexo GitHub 地址</a></li>
+<li><a href="https://hexo.io/" target="_blank" rel="external">Hexo 文档</a></li>
+<li><a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo 中文文档</a></li>
+</ul>
+</li>
+<li>Git<ul>
+<li><a href="https://github.com/git/git" target="_blank" rel="external">Git GitHub 地址</a></li>
+<li><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="external">Git 使用教程- 这里推荐中版</a></li>
+</ul>
+</li>
+<li>Hexo Theme<ul>
+<li><a href="https://github.com/viosey/hexo-theme-material" target="_blank" rel="external">hexo-theme-material GitHub 地址</a></li>
+<li><a href="https://material.viosey.com/" target="_blank" rel="external">material 主题文档</a></li>
+</ul>
+</li>
+</ul>
+<p>一下操作步骤，其实在上面的文档中能够全部找到。目前网上流传所谓的教程其实最开始也是从这些官方文档获得的。<strong>所以如果时间充裕，最好从官方文档入手！</strong></p>
+<h2 id="安装node"><a href="#安装node" class="headerlink" title="安装node"></a>安装node</h2><p>直接打开官方地址<a href="https://nodejs.org/en/" target="_blank" rel="external">node</a>，下载安装包即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-450f0bf96d56c348.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="解决国内NPM慢"><a href="#解决国内NPM慢" class="headerlink" title="解决国内NPM慢"></a>解决国内NPM慢</h3><p><a href="http://blog.csdn.net/rongbo_j/article/details/52106580" target="_blank" rel="external">解决国内NPM安装依赖速度慢问题</a></p>
+<p>只生效一次：<code>npm install -gd express --registry=http://registry.npm.taobao.org</code><br>永久生效：<code>npm config set registry http://registry.npm.taobao.org</code></p>
+<h4 id="cnpm"><a href="#cnpm" class="headerlink" title="cnpm"></a>cnpm</h4><p>由于npm插件在国外所有很慢，换成cnpm会快很多。详情可以看<a href="http://npm.taobao.org/" target="_blank" rel="external">http://npm.taobao.org/</a></p>
+<p>小白请看<a href="http://blog.csdn.net/zhangwenwu2/article/details/52778521" target="_blank" rel="external">npm用法以及更换到淘宝镜像的方法</a></p>
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>同样打开官方地址<a href="https://hexo.io/" target="_blank" rel="external">hexo</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-7906f95f92b239fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在终端执行其中的命令即可。</p>
+<h2 id="登录GitHub创建项目"><a href="#登录GitHub创建项目" class="headerlink" title="登录GitHub创建项目"></a>登录GitHub创建项目</h2><p><img src="http://upload-images.jianshu.io/upload_images/664334-f50d3d356a202614.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>填写项目名，<strong>这里一定要注意项目名称需要用用户名+github.io结尾</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-41acbd8d7acb0b4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>创建完成之后拖到下面会有关于gitpage的介绍。选择个主题再返回就启用了。<br><img src="http://upload-images.jianshu.io/upload_images/664334-6ff6d02ebe0a17ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来的事情就是将Hexo生成的静态页面push到这个仓库中就可以了。然后访问提示的这个链接就可以看到内容。</p>
+<h2 id="自动发布到GitHub"><a href="#自动发布到GitHub" class="headerlink" title="自动发布到GitHub"></a>自动发布到GitHub</h2><p>虽然经过上面的不走，勉勉强强能写点东西并且能够发布了。但是还有很多事情需要做，比如：</p>
+<ol>
+<li>主题的选择，一般情况下hexo的默认主题不会让你满意。</li>
+<li>自动部署，每次写了新的文章都用git命令操作一遍，很费时间。</li>
+<li>添加一些本地或者google搜索。</li>
+<li>支持评论等</li>
+<li>……</li>
+</ol>
+<p>上面的3、4、5在选用三方主题的时候基本上简单配置一下就可以的。所以不难。</p>
+<p><strong>自动部署在官方文档中也用说明。<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="external">自动部署中文版</a></strong></p>
+<ul>
+<li>安装<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external"> hexo-deployer-git</a>：<ul>
+<li>在当前hexo生成的目录下执行：<code>npm install hexo-deployer-git --save</code></li>
+</ul>
+</li>
+<li><p>配置deploy内容：比如我这样设置的</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line"> type: git</div><div class="line"> repo: git@github.com:****/***.github.io.git</div><div class="line"> branch: master</div></pre></td></tr></table></figure>
+<p>这里repo后面的内容可以直接复制你仓库中的地址：<br><img src="http://upload-images.jianshu.io/upload_images/664334-3bc95bffac2f1955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ul>
+<h3 id="给github账号添加ssh"><a href="#给github账号添加ssh" class="headerlink" title="给github账号添加ssh"></a>给github账号添加ssh</h3><p>经过上面的过程依然还不能push到仓库，还没设置ssh。如果你执行了<code>hexo  d</code>会报403的错误。</p>
+<p>设置Github的用户名和邮箱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config --global user.name &quot;你在Github上的昵称&quot;</div><div class="line">git config --global user.email &quot;你在Github上的邮箱&quot;</div></pre></td></tr></table></figure>
+<p>这里是全局设置的用户账号，考虑到某些仓库不能用这个账号，可以具体的仓库中使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config user.name &quot;用户名&quot; </div><div class="line">git config user.email &quot;邮箱&quot;</div></pre></td></tr></table></figure>
+<p>设置</p>
+<h3 id="公钥私钥"><a href="#公钥私钥" class="headerlink" title="公钥私钥"></a>公钥私钥</h3><p>接下来就是生产公钥私钥：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -C &quot;你在Github上的邮箱&quot;</div><div class="line">// 多账号情况下：（多个git使用）</div><div class="line">ssh-keygen -t rsa -f ~/.ssh/名称 -C &quot;邮箱&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li>-t 指定密钥类型，默认是 rsa ，可以省略。</li>
+<li>-f 指定密钥文件存储文件名。</li>
+</ul>
+<p>添加密钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-add id_rsa</div></pre></td></tr></table></figure>
+<p>执行后，会填写保存两种密钥的文件夹，和passphrase。这里是指的密码尽量简单点，因为后面会在添加私钥的时候用到。<strong>全部可以按enter。然后执行ls来查看生成后的文件。</strong></p>
+<ul>
+<li>id_rsa和id_rsa.pub分别是私有密钥和公有密钥。</li>
+<li>我们指定的文件名就是id_rsa.github，这时~/.ssh目录下会多出id_rsa.github和id_rsa.github.pub两个文件，id_rsa.github里保存的就是我们要使用的key。</li>
+</ul>
+<h3 id="有多个git账号怎么办（常见问题）"><a href="#有多个git账号怎么办（常见问题）" class="headerlink" title="有多个git账号怎么办（常见问题）"></a>有多个git账号怎么办（常见问题）</h3><ul>
+<li>创建：touch ~/.ssh/config</li>
+<li><p>添加内容：例如</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">	#gitlab</div><div class="line">Host ****</div><div class="line">HostName ****</div><div class="line">RSAAuthentication yes</div><div class="line">IdentityFile ~./ssh/id_rsa_gitlab</div><div class="line">#github</div><div class="line">Host****</div><div class="line">HostName ****</div><div class="line">RSAAuthentication yes</div><div class="line">User ****</div><div class="line">IdentityFile ~./ssh/github_id_rsa</div><div class="line">#github</div><div class="line">Host github</div><div class="line">HostName github.com</div><div class="line">RSAAuthentication yes</div><div class="line">User 你的登录邮箱</div><div class="line">IdentityFile ~./ssh/github_id_rsa</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="添加公钥到github账号ssh"><a href="#添加公钥到github账号ssh" class="headerlink" title="添加公钥到github账号ssh"></a>添加公钥到github账号ssh</h3><ul>
+<li>打开github账号的设置界面</li>
+<li>新建一个SSH Key</li>
+</ul>
+<p>然后将打开公钥文件，把内容粘贴到<br><img src="http://upload-images.jianshu.io/upload_images/664334-cf6211149269298f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>测试是否成功<code>ssh -T git@github.com</code></p>
+<p>如果显示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Are you sure you want to continue connecting (yes/no)?</div></pre></td></tr></table></figure>
+<p>输入yes。<br>然后就可以看到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hi yourusername! You&apos;ve successfully authenticated, but GitHub does not</div><div class="line">provide shell access.</div></pre></td></tr></table></figure>
+<h2 id="设置主题"><a href="#设置主题" class="headerlink" title="设置主题"></a>设置主题</h2><p>这部分看着文档走就可以了，没什么难度。当然第一次创建一个比较有感觉的博客还是需要花一些时间的。这里我大致弄了一个模板。如果嫌麻烦可以直接用这个项目生成。地址<a href="https://github.com/ZhiJianShuSheng/BlogRecord" target="_blank" rel="external">后期补上</a></p>
+<h2 id="THE-END"><a href="#THE-END" class="headerlink" title="THE END"></a>THE END</h2><h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="http://www.jianshu.com/p/0d7038102cd6" target="_blank" rel="external">生成ssh公钥并连接到github</a><br><a href="http://blog.csdn.net/diamont1001/article/details/51822803" target="_blank" rel="external">Mac里添加多个git ssh</a></p>
 
     
 
@@ -440,11 +449,6 @@ if ("ontouchstart" in document.documentElement) {
                 
 
                 <!-- Post Comments -->
-                
-                    
-
-
-
                 
             </div>
 
@@ -457,6 +461,14 @@ if ("ontouchstart" in document.documentElement) {
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
+    
+        <a href="/2017/04/01/2017/3/AndroidSDKVersion简介及降低APILevel/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
     
 </nav>
 
@@ -637,6 +649,14 @@ It will not impact the appearance and can give developers a lot of support :)
 </aside>
 
                     
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
 
                     
 

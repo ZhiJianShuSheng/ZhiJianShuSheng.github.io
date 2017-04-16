@@ -10,6 +10,8 @@
     
     <title>
         
+            iOS音频相关基础整理及参考文章整理 | 
+        
         纸简书生
     </title>
 
@@ -46,7 +48,7 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="纸简书生">
+    <meta property="og:title" content="iOS音频相关基础整理及参考文章整理 | 纸简书生">
     <meta property="og:description" content="人与人之间的差别在于，一、想得到和想不到，二、想得到且做到的想到但做不到；离开舒适区、自律是方法论。写作，阅读、锻炼、早起、旅行是方法。牢记方法论、价值观，躬行方法，让自己更好！">
 
     <!--[if lte IE 9]>
@@ -195,6 +197,41 @@
 
                     <!-- Post TOC -->
 
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础知识"><span class="post-toc-number">1.</span> <span class="post-toc-text">基础知识</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简化声音处理流程"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">简化声音处理流程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#采样频率-采样精度"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">采样频率(采样精度)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#采样位数"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">采样位数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#编码格式"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">编码格式</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#iOS"><span class="post-toc-number">2.</span> <span class="post-toc-text">iOS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#播放流程简化"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">播放流程简化</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常用的第三方库"><span class="post-toc-number">3.</span> <span class="post-toc-text">常用的第三方库</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实时播放"><span class="post-toc-number">4.</span> <span class="post-toc-text">实时播放</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#扩展阅读"><span class="post-toc-number"></span> <span class="post-toc-text">扩展阅读</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">基本概念</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#系列"><span class="post-toc-number">2.</span> <span class="post-toc-text">系列</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
 
 <!-- Layouts -->
 
@@ -208,19 +245,11 @@
                 
     <!-- Paradox Post Header -->
     
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-            <script>
-    var randomNum = Math.floor(Math.random() * 19 + 1);
-
-    $('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')');
-</script>
-
-        
+        <!-- Custom Thumbnail -->
+        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50" style="background-image:url(http://upload-images.jianshu.io/upload_images/664334-e87529cb2e705693.png)">
     
             <p class="article-headline-p">
-                
+                iOS音频相关基础整理及参考文章整理
             </p>
         </div>
 
@@ -239,7 +268,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>纸简书生</strong>
-        <span>4月 13, 2017</span>
+        <span>4月 16, 2017</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -263,7 +292,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        
+        <a class="post_tag-link" href="/tags/audio/">audio</a>
     </ul>
     
 
@@ -279,7 +308,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=&url=http://yoursite.com//about/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=iOS音频相关基础整理及参考文章整理&url=http://yoursite.com//2017/04/16/2017/4/iOS音频相关基础整理及参考文章整理/index.html&pic=&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -312,124 +341,56 @@
                 <!-- Post Content -->
                 <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        
-<!doctype html>
-
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=1024">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>关于我 | 纸简书生</title>
-    
-    <meta name="description" content="I am weslywxl, a iOS、Android、java programmer from China and working HangZhou.">
-    <meta name="author" content="纸简书生">
-
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet">
-
-    <link href="css/aboutme.css" rel="stylesheet">
-    <link rel="shortcut icon" href="favicon.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <base target="_blank">
-</head>
-
-<body class="impress-not-supported">
-
-<div class="fallback-message">
-    <p>您的浏览器 <b>不支持</b> impress.js的展示要求, 将为您呈现简化版的展示</p>
-    <p>为了获取最佳效果，请使用最新版的<b>Chrome</b>, <b>Safari</b> 或 <b>Firefox</b> 浏览器</p>
-    <p>珍爱生命，保护地球，远离IE。</p>
-</div>
-
-
-<div id="impress">
-    <div id="welcome" class="step" data-x="-2000" data-y="-2500">
-        <p>欢迎来到</p>
-        <p><span class="title"><b>纸简书生</b></span></p>
-        <p><span class="footnote">我叫<span class="name">王小龙</span>，这里是我的新巢</span></p>
-    </div>
-
-    <div id="me" class="step" data-x="0" data-y="-2500">
-        <b class="now_me">现在的我：</b>
-        <ul>
-            <li><b class="unity">职业 iOS、Android、Java 开发者</b></li>
-            <li><b class="ios">业余瞎写作者</b></li>
-            <li><b class="photo">业余健身爱好者</b></li>
-        </ul>
-    </div>
-
- 
-
-    <div id="world" class="step" data-x="-100" data-y="2900" data-z="900" data-rotate="-90" data-scale="5">
-        <p>有时候会觉得，世界真的很小</p>
-    </div>
-
-    <div id="meet" class="step" data-x="1300" data-y="6000" data-z="2400" data-scale="6">
-        <p>也许我们就在某时某地</p>
-        <p>曾经擦肩而过</p>
-        <p>而你我，却浑然不觉</p>
-    </div>
-
-    <div id="tiny" class="step" data-x="1300" data-y="6000" data-z="-3000" data-rotate="300" data-scale="1">
-        <p>但是</p>
-    </div>
-
-    <div id="comein" class="step" data-x="0" data-y="7000" data-z="-3000" data-rotate="300">
-        <p>从此刻开始</p>
-        <p>我们的生活便有了<b>交集</b></p>
-    </div>
-
-    <div id="mywords" class="step" data-x="4500" data-y="3500" data-z="3000" data-rotate="160">
-        <p>也许您在这里能看到的只是</p>
-        <p>中国千千万万工科生之中最普通的一员</p>
-        <p>所写下的最蹩足的文字</p>
-    </div>
-
-    <div id="grow" class="step" data-x="3500" data-y="-850" data-z="3000" data-rotate="270" data-scale="6">
-        <p>但我相信它们真实地记载了</p>
-        <p><b>我的生活，我的成长</b></p>
-    </div>
-
-    <div id="knowme" class="step" data-x="-6000" data-y="-800" data-z="0" data-rotate="0" data-scale="1">
-        <p>正如</p>
-        <p>伯乐得见绝世好马，子期终遇伯牙佳音</p>
-    </div>
-
-    <div id="prizeme" class="step" data-x="-6000" data-y="-500" data-z="-500" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
-        <p><span class="horse">良驹美景，</span> <span class="moutain">高山流水，</span> <span class="hope">我真心希望</span> <span class="youare">您就是</span> <span class="my">我的伯乐，我的子期</span> <b></b></p>
-    </div>
-
-
-    <div id="one-more-thing" class="step" data-x="-1500" data-y="-1100" data-z="0" data-scale="2">
-        <p>One More Thing</p>
-        <p>其实是一句话，想分享给您</p>
-    </div>
-
-    <div id="motto" class="step" data-x="0" data-y="1500" data-z="6000" data-scale="5">
-        <p>不论您走到哪儿，在做什么</p>
-        <p>都请勿忘初心 请记住</p>
-        <p><b>上善若水，人淡如菊</b></p>
-    </div>
-
-    <div id="back" class="step" data-x="-6000" data-y="5200" data-scale="2">
-        <p>谢谢您的来访 ！</p>
-    </div>
-</div>
-
-<div class="hint">
-    <p>使用空格或方向键继续</p>
-</div>
-<script>
-if ("ontouchstart" in document.documentElement) { 
-    document.querySelector(".hint").innerHTML = "<p>在左侧或右侧点击继续</p>";
-}
-</script>
-
-<script src="js/impress.js"></script>
-<script>impress().init();</script>
-
-</body>
-</html>
+        <p>来这边第一天就感受到了技术氛围浓厚，音视频方面全是用自己的服务，之前很少自己写底层的顿时，感觉压力山大。接到的第一个任务就是关于iOS音视频处理，这里简单记录下自己看过的一些音频相关知识点，视频相关后续放出。<br><a id="more"></a></p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>现实生活中，我们听到的声音都是时间连续的，我们称为这种信号叫<code>模拟信号</code>。模拟信号需要进行<code>数字化</code>以后才能在计算机中使用。目前我们在计算机上进行音频播放都需要依赖于音频文件。</p>
+<p><strong>音频文件的生成过程是将<code>声音信息采样</code>、<code>量化</code>和<code>编码</code>产生的<code>数字信号</code>的过程</strong>。人耳所能听到的声音，最低的频率是从20Hz起一直到最高频率20KHZ，因此音频文件格式的最大带宽是20KHZ。根据奈奎斯特的理论，<strong>只有采样频率<code>高于</code>声音信号最高频率的两倍时，才能把数字信号表示的声音还原成为原来的声音，所以音频文件的采样率一般在40~50KHZ，比如最常见的CD音质采样率44.1KHZ。</strong></p>
+<p>对声音进行采样、量化过程被称为脉冲编码调制（Pulse Code Modulation），<code>简称PCM</code>。<strong>PCM数据是最原始的音频数据完全无损</strong>，所以PCM数据虽然音质优秀但体积庞大，为了解决这个问题先后诞生了一系列的音频格式，这些音频格式运用不同的方法对音频数据进行压缩，<strong>其中有无损压缩（ALAC、APE、FLAC）和有损压缩（MP3、AAC、OGG、WMA）两种</strong>。</p>
+<p>位速/比特率/码率描述的都是一个东西，<strong>是指在一个数据流中每秒钟能通过的信息量</strong>，<code>代表了压缩质量</code>，比如MP3常用码率有128kbit/s、160kbit/s、320kbit/s等等，越高代表着声音音质越好。MP3中的数据有ID3和音频数据组成，ID3用于存储歌名、演唱者、专辑、音轨等我们可以常见的信息。</p>
+<h3 id="简化声音处理流程"><a href="#简化声音处理流程" class="headerlink" title="简化声音处理流程"></a>简化声音处理流程</h3><p>模拟信号 -&gt; 输入设备（传递电压值）-&gt; 声卡(经过采样跟量化（即设置声音大小等各种值）) -&gt; 磁盘（文件） -&gt; 声卡 -&gt; 输出设备 -&gt; 模拟信号</p>
+<p>我们声音在物理上用波形表示，那么我们将这些波形称作为模拟信号。而我们计算机磁盘只能存储（01010101）的格式。我们将模拟信号转换成能够被磁盘存储的格式（010101）称之为数字信号。这个转换的过程我们叫模数转换。</p>
+<p>我们发出来的声音（模拟信号）是连续的，我们如果要一直的对模拟信号进行转化，产生的数字信号会很大。那么我们就要采样，而<strong>采样精度就是每秒计算机对模拟信号进行采样的次数</strong>。最常见的采样精度就是上面提到的44.1khz/s,这个是经过大师们多年研究得出的数据，低于这个数据，效果就会很差，而高于这个数据，效果的差距不是很明显。</p>
+<p>采样后会后是变成了（0101010110100101…），那声音的音量是有大小的，那这串数据，怎样表示声音的大小呢？ 这就涉及到了比特率，它是指在一个数据流中每秒钟能通过的信息量。 比特率就是将声音的大小划分为多少等级。举例下：8比特，在二进制中，表示有8位，表示的十进制的值就是0（00000000）～256（11111111），那每个数值就代表着一个声音大小。</p>
+<blockquote>
+<p>过程可以简化为：波形在经过输入设备的时候，会产生电压值。声卡通过计算采样率、比特率，以每秒几次的频率去获取这些电压值，然后将这些电压值以几bit的形式转换成数字信号。计算机将数据格式存储为文件。</p>
+</blockquote>
+<p><strong>文件是用来装数字信号的</strong>，文件包括了比特率、采样率、声道、编码方式、以及被编码过后的数字信号。</p>
+<p>文件格式就是制造者自己规定的一种名称，在每个文件格式都会特定支持几种编码格式。<strong>打个比方就是文件就是一个容器，里面可以装不同的水，有的可以装一种，有的可以装好几种。</strong></p>
+<p>经过采样后的数字信号很大，有时候我们不需要这么大的，所以我们就要进行编码压缩，当然压缩技术都是有损的。在不大影响音频的效果的情况下，<strong>舍弃掉一些高频或者低频的数据</strong>。</p>
+<h3 id="采样频率-采样精度"><a href="#采样频率-采样精度" class="headerlink" title="采样频率(采样精度)"></a>采样频率(采样精度)</h3><p>采样频率是指单位时间内对声音模拟信号的采样次数。采样率类似于视频的帧数，比如电影的采样率是24Hz。<strong>当我们把采样到的一个个静止画面再以采样率同样的速度回放时，看到的就是连续的画面。</strong>同样的道理，把以44.1kHZ采样率记录的CD以同样的速率播放时，就能听到连续的声音。显然，这个采样率越高，听到的声音和看到的图像就越连贯。</p>
+<h3 id="采样位数"><a href="#采样位数" class="headerlink" title="采样位数"></a>采样位数</h3><p>采样位数可以理解为采集卡处理声音的解析度。电脑中的声音文件是用数字0和1来表示的。连续的模拟信号按一定的采样频率经数码脉冲取样后，<strong>每一个离散的脉冲信号被以一定的量化精度量化成一串二进制编码流</strong>，<code>这串编码流的位数</code>即为采样位数，也称为量化精度。</p>
+<h3 id="编码格式"><a href="#编码格式" class="headerlink" title="编码格式"></a>编码格式</h3><p>可以理解为每种音频格式不同的编解码方式，而iOS下这些编码方式被集中到一个枚举中.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">CF_ENUM(AudioFormatID)</div><div class="line">&#123;</div><div class="line">    kAudioFormatLinearPCM               = &apos;lpcm&apos;,</div><div class="line">    kAudioFormatAC3                     = &apos;ac-3&apos;,</div><div class="line">    kAudioFormat60958AC3                = &apos;cac3&apos;,</div><div class="line">    kAudioFormatAppleIMA4               = &apos;ima4&apos;,</div><div class="line">    kAudioFormatMPEG4AAC                = &apos;aac &apos;,</div><div class="line">    kAudioFormatMPEG4CELP               = &apos;celp&apos;,</div><div class="line">    kAudioFormatMPEG4HVXC               = &apos;hvxc&apos;,</div><div class="line">    kAudioFormatMPEG4TwinVQ             = &apos;twvq&apos;,</div><div class="line">    kAudioFormatMACE3                   = &apos;MAC3&apos;,</div><div class="line">    kAudioFormatMACE6                   = &apos;MAC6&apos;,</div><div class="line">    kAudioFormatULaw                    = &apos;ulaw&apos;,</div><div class="line">    kAudioFormatALaw                    = &apos;alaw&apos;,</div><div class="line">    kAudioFormatQDesign                 = &apos;QDMC&apos;,</div><div class="line">    kAudioFormatQDesign2                = &apos;QDM2&apos;,</div><div class="line">    kAudioFormatQUALCOMM                = &apos;Qclp&apos;,</div><div class="line">    kAudioFormatMPEGLayer1              = &apos;.mp1&apos;,</div><div class="line">    kAudioFormatMPEGLayer2              = &apos;.mp2&apos;,</div><div class="line">    kAudioFormatMPEGLayer3              = &apos;.mp3&apos;,</div><div class="line">    kAudioFormatTimeCode                = &apos;time&apos;,</div><div class="line">    kAudioFormatMIDIStream              = &apos;midi&apos;,</div><div class="line">    kAudioFormatParameterValueStream    = &apos;apvs&apos;,</div><div class="line">    kAudioFormatAppleLossless           = &apos;alac&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_HE             = &apos;aach&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_LD             = &apos;aacl&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_ELD            = &apos;aace&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_ELD_SBR        = &apos;aacf&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_ELD_V2         = &apos;aacg&apos;,    </div><div class="line">    kAudioFormatMPEG4AAC_HE_V2          = &apos;aacp&apos;,</div><div class="line">    kAudioFormatMPEG4AAC_Spatial        = &apos;aacs&apos;,</div><div class="line">    kAudioFormatAMR                     = &apos;samr&apos;,</div><div class="line">    kAudioFormatAMR_WB                  = &apos;sawb&apos;,</div><div class="line">    kAudioFormatAudible                 = &apos;AUDB&apos;,</div><div class="line">    kAudioFormatiLBC                    = &apos;ilbc&apos;,</div><div class="line">    kAudioFormatDVIIntelIMA             = 0x6D730011,</div><div class="line">    kAudioFormatMicrosoftGSM            = 0x6D730031,</div><div class="line">    kAudioFormatAES3                    = &apos;aes3&apos;,</div><div class="line">    kAudioFormatEnhancedAC3             = &apos;ec-3&apos;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>比较通俗的理解：封装格式和编码的关系，就是和酒瓶与酒的关系差不多，而播放器就是开酒器。为了可以喝更好的酒，最好先了解酒是什么酒，酒瓶是什么酒瓶，怎么使用开酒器开酒瓶，码率或者可以比喻做酒的原料。对于同一个酒瓶和做同一种酒的情况下，如果原料太少，又要要求用酒把酒瓶灌满，此时只好兑水了，酒的品质就会变差了。然而，如果原料太多，又会造成原料浪费。所以要做好酒，我们就需要充足的原料。</p>
+<p><strong>封装格式就是文件格式，编码就是编码格式。</strong></p>
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><h3 id="播放流程简化"><a href="#播放流程简化" class="headerlink" title="播放流程简化"></a>播放流程简化</h3><p>这里以播放MP3文件为例：</p>
+<ol>
+<li>读取MP3文件</li>
+<li>解析采样率、码率、时长等信息，分离MP3中的音频帧</li>
+<li>对分离出来的音频帧解码得到PCM数据</li>
+<li>对PCM数据进行音效处理（均衡器、混响器等，非必须）</li>
+<li>把PCM数据解码成音频信号</li>
+<li>把音频信号交给硬件播放<br>重复1-6步直到播放完成</li>
+</ol>
+<p>采集和量化的过程和上面的过程基本相反。</p>
+<p>iOS对音频处理的封装</p>
+<p><img src="http://msching.github.io/images/iOS-audio/api-architectural-layers.png" alt=""></p>
+<p>上述模块接口说明：</p>
+<ul>
+<li>Audio File Services：读写音频数据，可以完成播放流程中的第2步；</li>
+<li>Audio File Stream Services：对音频进行解码，可以完成播放流程中的第2步；</li>
+<li>Audio Converter services：音频数据转换，可以完成播放流程中的第3步；</li>
+<li>Audio Processing Graph Services：音效处理模块，可以完成播放流程中的第4步；</li>
+<li>Audio Unit Services：播放音频数据：可以完成播放流程中的第5步、第6步；</li>
+<li>Extended Audio File Services：<strong>Audio File Services和Audio Converter services的结合体；<br>AVAudioPlayer/AVPlayer(AVFoundation)：高级接口，可以完成整个音频播放的过程（包括本地文件和网络流播放，第4步除外）；一般我们都是在这层操作</strong></li>
+<li>Audio Queue Services：高级接口，可以进行录音和播放，可以完成播放流程中的第3、5、6步；</li>
+<li>OpenAL：用于游戏音频播放，基本没用到过</li>
+</ul>
+<h2 id="常用的第三方库"><a href="#常用的第三方库" class="headerlink" title="常用的第三方库"></a>常用的第三方库</h2><p><a href="https://github.com/syedhali/EZAudio#toc24" target="_blank" rel="external">EZAudio</a>这是OC版本，目前已经不再维护。作者转向了Swift项目<a href="https://github.com/audiokit/AudioKit" target="_blank" rel="external">AudioKit</a>。这个库也很牛逼。</p>
+<h2 id="实时播放"><a href="#实时播放" class="headerlink" title="实时播放"></a>实时播放</h2><p><a href="http://www.jianshu.com/p/feeb107b6657" target="_blank" rel="external">AAC 到 PCM 音频解码</a><br><a href="http://www.jianshu.com/p/279a9e5b36b5" target="_blank" rel="external">使用AudioToolbox播放AAC</a></p>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/CoreAudioEssentials/CoreAudioEssentials.html#//apple_ref/doc/uid/TP40003577-CH10-SW1" target="_blank" rel="external">Core Audio Essentials</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><a href="http://blog.sina.com.cn/s/blog_7a162d000101befe.html" target="_blank" rel="external">IOS开发笔记之音频（一）</a><br><a href="https://brownfeng.github.io/2016/07/28/iOS%E9%9F%B3%E9%A2%91%E7%B3%BB%E5%88%97(%E5%9B%9B" target="_blank" rel="external">iOS音频系列(四)–音频的文件格式和数据格式</a>/)  基本概念解释<br><a href="https://brownfeng.github.io/2016/07/25/iOS%E9%9F%B3%E9%A2%91%E7%B3%BB%E5%88%97(%E4%B8%80" target="_blank" rel="external">iOS音频系列(一)–音频基础</a>/)  对一些基本概念的解释</p>
+<p><a href="http://xuzichao.com/2015/03/15/IOS%20%E9%9F%B3%E9%A2%91%E4%B8%80%E8%A7%88/" target="_blank" rel="external">IOS 音频一览</a> 文章后面部分有对特定问题的解决，值得一看</p>
+<h2 id="系列"><a href="#系列" class="headerlink" title="系列"></a>系列</h2><p><a href="http://msching.github.io/blog/categories/ios-audio/" target="_blank" rel="external">iOS音频播放系列</a> 强力推荐 🎯<br><a href="http://justinyangjing.github.io/2016/07/14/iOS%E9%9F%B3%E9%A2%91%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%80%9A%E4%BF%A1/" target="_blank" rel="external">iOS音频编程之实时语音通信</a>用到了一些偏底层的<br><a href="http://chenhu1001.github.io/archives/" target="_blank" rel="external">iOS直播系列</a><br><a href="http://www.jianshu.com/p/502a49c8dcd3" target="_blank" rel="external">iOS在线音频流播放</a>这个作者也是非常牛逼，关于图像处理和音频处理的都可以看看。</p>
 
     
 
@@ -441,16 +402,19 @@ if ("ontouchstart" in document.documentElement) {
 
                 <!-- Post Comments -->
                 
-                    
-
-
-
-                
             </div>
 
             <!-- Post Prev & Next Nav -->
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
+    
+        <a href="/2017/04/06/2017/4/CAShapeLayer大法/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
     
 
     <!-- Section Spacer -->
@@ -637,6 +601,14 @@ It will not impact the appearance and can give developers a lot of support :)
 </aside>
 
                     
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
 
                     
 
