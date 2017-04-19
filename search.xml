@@ -4,6 +4,40 @@
   
     
     <entry>
+      <title><![CDATA[解决mac下Spotlight和Notes(记事本)搜索失效]]></title>
+      <url>http://yoursite.com/2017/04/17/2017/4/%E8%A7%A3%E5%86%B3mac%E4%B8%8BSpotlight%E5%92%8CNotes%E6%90%9C%E7%B4%A2%E5%A4%B1%E6%95%88/</url>
+      <content type="html"><![CDATA[<p>由于换了mac，之前的习惯是把一些常用的文字资料放在Notes（记事本）中，这样可以在手机和电脑中实现资料互通。但是最近换了新mac，notes能够从Icloud中拿到同步的资料，但是始终搜索不出来。而且spotlight搜索也不起任何作用。这里记录一下解决的方法。<br><a id="more"></a></p>
+<blockquote>
+<p><strong>我的是英文环境，对应到中文环境应该一样的操作</strong></p>
+</blockquote>
+<h2 id="解决spotlight不能搜索"><a href="#解决spotlight不能搜索" class="headerlink" title="解决spotlight不能搜索"></a>解决spotlight不能搜索</h2><ol>
+<li>尝试重建索引<code>sudo mdutil -E /</code>默认会建立磁盘下所有索引，如果想指定某个外接磁盘或者其他磁盘可以使用<code>sudo mdutil -E /Volumes/MiniMe/</code>对指定的磁盘建立索引。如果出现<code>invalid destination port
+Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Splot服务:<code>sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist</code>。顺便提一下关闭的命令<code>sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist</code>，然后再建索引。</li>
+<li>如果上面操作还是不行，在执行强制重建索引命令<code>sudo mdutil -a -i on</code>。我就是通过这个命令解决的。</li>
+</ol>
+<h2 id="解决Notes-记事本-不能搜索"><a href="#解决Notes-记事本-不能搜索" class="headerlink" title="解决Notes(记事本)不能搜索"></a>解决Notes(记事本)不能搜索</h2><p>这个问题其实是让人非常痛苦的，因为notes里面保存了自己很多的资料。解决这个问题其实很简单，<strong>将iCloud同步过来的一个文件夹，拖到on my mac下就可以了。具体方法就是，点击文件夹，按住option键，拖到on my mac下就可以了</strong></p>
+<p>猜测通过这种方式，重建了对于icloud的索引，所以能够搜索到了。</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="http://www.cultofmac.com/154458/re-index-spotlight-from-the-terminal-re-gain-valuable-time-for-life-os-x-tips/" target="_blank" rel="external">Re-Index Spotlight from the Terminal</a><br><a href="http://www.cultofmac.com/211559/enable-spotlight-indexing-to-re-index-your-mac-hard-drive-os-x-tips/" target="_blank" rel="external">Enable Spotlight Indexing To Re-Index Your Mac Hard Drive </a><br><a href="https://apple.stackexchange.com/questions/216462/how-can-i-force-an-index-of-all-the-apple-notes" target="_blank" rel="external">How can I force an index of all the Apple notes?</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> mac </category>
+            
+            <category> tool </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> tool </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[iOS音频相关基础整理及参考文章整理]]></title>
       <url>http://yoursite.com/2017/04/16/2017/4/iOS%E9%9F%B3%E9%A2%91%E7%9B%B8%E5%85%B3%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86%E5%8F%8A%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%E6%95%B4%E7%90%86/</url>
       <content type="html"><![CDATA[<p>来这边第一天就感受到了技术氛围浓厚，音视频方面全是用自己的服务，之前很少自己写底层的顿时，感觉压力山大。接到的第一个任务就是关于iOS音视频处理，这里简单记录下自己看过的一些音频相关知识点，视频相关后续放出。<br><a id="more"></a></p>

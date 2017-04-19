@@ -10,7 +10,7 @@
     
     <title>
         
-            标签: animation | 
+            解决mac下Spotlight和Notes(记事本)搜索失效 | 
         
         纸简书生
     </title>
@@ -48,7 +48,7 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="标签: animation | 纸简书生">
+    <meta property="og:title" content="解决mac下Spotlight和Notes(记事本)搜索失效 | 纸简书生">
     <meta property="og:description" content="人与人之间的差别在于，一、想得到和想不到，二、想得到且做到的想到但做不到；离开舒适区、自律是方法论。写作，阅读、锻炼、早起、旅行是方法。牢记方法论、价值观，躬行方法，让自己更好！">
 
     <!--[if lte IE 9]>
@@ -195,140 +195,208 @@
                         </button>
                     
 
-                    <!-- Index Module -->
-<div class="material-index mdl-grid">
-    
-    <div class="locate-thumbnail-symbol"></div>
+                    <!-- Post TOC -->
 
     
-        
-            <!-- Paradox Thumbnail -->
-            <div class="post_entry-module mdl-card mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#解决spotlight不能搜索"><span class="post-toc-number">1.</span> <span class="post-toc-text">解决spotlight不能搜索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#解决Notes-记事本-不能搜索"><span class="post-toc-number">2.</span> <span class="post-toc-text">解决Notes(记事本)不能搜索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展阅读"><span class="post-toc-number">3.</span> <span class="post-toc-text">扩展阅读</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
     
         
             <!-- Random Thumbnail -->
             <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
 
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/04/06/2017/4/CAShapeLayer大法/">CAShapeLayer大法(未完)</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            好久都没有研究iOS动画了，昨天看到了一个不规则view。当时就想应该是用CAShapeLayer做的。于是这里回顾一下CAShapeLayer、CADisplayLink、UIBezierPath，mask。
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/04/06/2017/4/CAShapeLayer大法/" target="_self">继续阅读</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar3.png" width="44px" height="44px" alt="纸简书生's avatar">
-            </div>
-            <div>
-                <strong>纸简书生</strong>
-                <span>4月 06, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/iOS/">iOS</a>, <a class="post_category-link" href="/categories/iOS/animation/">animation</a>
-            </span>
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-        
-        
-    
-        
-            <!-- Paradox Thumbnail -->
-            <div class="post_entry-module mdl-card mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
-    
-        <!-- Custom Thumbnail -->
-        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50" style="background-image:url(http://upload-images.jianshu.io/upload_images/664334-8d38e4a0d3d9e438.png)">
-    
-
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/04/06/2017/4/自己整理iOS 常用第三方/">自己整理iOS 常用第三方（持续更新...）</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            网上有很多整理使用第三方库的文章，毕竟是别人使用的，有一些做iOS家喻户晓的比如AFNetworking、SDWebImage，SpringPop这里就不用罗列了。这里主要总结一下自己平时用到的一些第三方，或者自己觉得很有学习必要的第三方。
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/04/06/2017/4/自己整理iOS 常用第三方/" target="_self">继续阅读</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar3.png" width="44px" height="44px" alt="纸简书生's avatar">
-            </div>
-            <div>
-                <strong>纸简书生</strong>
-                <span>4月 06, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/iOS/">iOS</a>, <a class="post_category-link" href="/categories/iOS/animation/">animation</a>
-            </span>
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-        
-        
-    
-
-    
-
-    
-        <script>
-    var randomNum;
-
-    var locatePost = $('.locate-thumbnail-symbol').next();
-    for(var i = 0; i < 5; i++) {
-        randomNum = Math.floor(Math.random() * 19 + 1);
-
-        locatePost.children('.post_thumbnail-random').attr('id', 'random_thumbnail-'+randomNum);
-        locatePost.children('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')')
-
-        locatePost = locatePost.next();
-    }
+    $('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')');
 </script>
 
+        
+    
+            <p class="article-headline-p">
+                解决mac下Spotlight和Notes(记事本)搜索失效
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar3.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>纸简书生</strong>
+        <span>4月 17, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/tool/">tool</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=解决mac下Spotlight和Notes(记事本)搜索失效&url=http://yoursite.com//2017/04/17/2017/4/解决mac下Spotlight和Notes搜索失效/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>由于换了mac，之前的习惯是把一些常用的文字资料放在Notes（记事本）中，这样可以在手机和电脑中实现资料互通。但是最近换了新mac，notes能够从Icloud中拿到同步的资料，但是始终搜索不出来。而且spotlight搜索也不起任何作用。这里记录一下解决的方法。<br><a id="more"></a></p>
+<blockquote>
+<p><strong>我的是英文环境，对应到中文环境应该一样的操作</strong></p>
+</blockquote>
+<h2 id="解决spotlight不能搜索"><a href="#解决spotlight不能搜索" class="headerlink" title="解决spotlight不能搜索"></a>解决spotlight不能搜索</h2><ol>
+<li>尝试重建索引<code>sudo mdutil -E /</code>默认会建立磁盘下所有索引，如果想指定某个外接磁盘或者其他磁盘可以使用<code>sudo mdutil -E /Volumes/MiniMe/</code>对指定的磁盘建立索引。如果出现<code>invalid destination port
+Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Splot服务:<code>sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist</code>。顺便提一下关闭的命令<code>sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist</code>，然后再建索引。</li>
+<li>如果上面操作还是不行，在执行强制重建索引命令<code>sudo mdutil -a -i on</code>。我就是通过这个命令解决的。</li>
+</ol>
+<h2 id="解决Notes-记事本-不能搜索"><a href="#解决Notes-记事本-不能搜索" class="headerlink" title="解决Notes(记事本)不能搜索"></a>解决Notes(记事本)不能搜索</h2><p>这个问题其实是让人非常痛苦的，因为notes里面保存了自己很多的资料。解决这个问题其实很简单，<strong>将iCloud同步过来的一个文件夹，拖到on my mac下就可以了。具体方法就是，点击文件夹，按住option键，拖到on my mac下就可以了</strong></p>
+<p>猜测通过这种方式，重建了对于icloud的索引，所以能够搜索到了。</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="http://www.cultofmac.com/154458/re-index-spotlight-from-the-terminal-re-gain-valuable-time-for-life-os-x-tips/" target="_blank" rel="external">Re-Index Spotlight from the Terminal</a><br><a href="http://www.cultofmac.com/211559/enable-spotlight-indexing-to-re-index-your-mac-hard-drive-os-x-tips/" target="_blank" rel="external">Enable Spotlight Indexing To Re-Index Your Mac Hard Drive </a><br><a href="https://apple.stackexchange.com/questions/216462/how-can-i-force-an-index-of-all-the-apple-notes" target="_blank" rel="external">How can I force an index of all the Apple notes?</a></p>
+
+    
+
     
 </div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/04/16/2017/4/iOS音频相关基础整理及参考文章整理/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
 
 
                     
@@ -503,6 +571,14 @@ It will not impact the appearance and can give developers a lot of support :)
 </aside>
 
                     
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
 
                     
 
