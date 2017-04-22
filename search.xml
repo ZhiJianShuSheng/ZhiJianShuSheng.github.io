@@ -4,6 +4,87 @@
   
     
     <entry>
+      <title><![CDATA[谈谈位枚举NS_OPTIONS]]></title>
+      <url>http://yoursite.com/2017/04/22/2017/4/%E8%B0%88%E8%B0%88%E4%BD%8D%E6%9E%9A%E4%B8%BENS_OPTIONS/</url>
+      <content type="html"><![CDATA[<p>给别人讲问题的时候遇到类似的，顺便就复习下。<br><a id="more"></a></p>
+<h1 id="谈谈位枚举NS-OPTIONS"><a href="#谈谈位枚举NS-OPTIONS" class="headerlink" title="谈谈位枚举NS_OPTIONS"></a>谈谈位枚举NS_OPTIONS</h1><p>在iOS开发中枚举大家用得最多的应该是NS_ENUM。NS_ENUM也没什么好讲的。主要来讲讲位枚举NS_OPTIONS。</p>
+<p>下面是他们在Foundation.framework的NSObjCRuntime.h的定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">#if (__cplusplus &amp;&amp; __cplusplus &gt;= 201103L &amp;&amp; (__has_extension(cxx_strong_enums) || __has_feature(objc_fixed_enum))) || (!__cplusplus &amp;&amp; __has_feature(objc_fixed_enum))</div><div class="line"></div><div class="line">#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type</div><div class="line"></div><div class="line">#if (__cplusplus)</div><div class="line"></div><div class="line">#define NS_OPTIONS(_type, _name) _type _name; enum : _type</div><div class="line"></div><div class="line">#else</div><div class="line"></div><div class="line">#define NS_OPTIONS(_type, _name) enum _name : _type _name; enum _name : _type</div><div class="line"></div><div class="line">#endif</div><div class="line"></div><div class="line">#else</div><div class="line"></div><div class="line">#define NS_ENUM(_type, _name) _type _name; enum</div><div class="line"></div><div class="line">#define NS_OPTIONS(_type, _name) _type _name; enum</div><div class="line"></div><div class="line">#endif</div></pre></td></tr></table></figure>
+<p>其实从枚举定义来看，NS_ENUM和NS_OPTIONS本质是一样的，仅仅从字面上来区分其用途。NS_ENUM是通用情况，NS_OPTIONS一般用来定义具有位移操作或特点的情况（bitmask掩码)。</p>
+<h2 id="与、或操作"><a href="#与、或操作" class="headerlink" title="与、或操作"></a>与、或操作</h2><p>先讲讲关于二进制的位于操作。可能好多的同学都有些忘了。这里复习下。</p>
+<table>
+<thead>
+<tr>
+<th>位操作</th>
+<th>解释</th>
+<th>例子</th>
+<th>应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按位与（&amp;）</td>
+<td><strong>有0则0</strong>，当俩位同时为1时返回1.</td>
+<td>4=0000 0000 0000 0100 &amp;7 =0000 0000 0000 0111= 0000 0000 0000 0100</td>
+<td>1.清零<br>2.获取一个数据的指定位 <br>3.保留数据区的特定位<br></td>
+</tr>
+<tr>
+<td>按位或（`</td>
+<td>`）</td>
+<td><strong>有1则1</strong>，只要有一位为1则即可返回1.</td>
+<td>5 = 0000 0000 0000 0101`</td>
+<td>` 7= 0000 0000 0000 0111=0000 0000 0000 0111</td>
+<td><strong>设定一个数据的指定位</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>&lt;&lt;:左移运算符。左移k位 相当于 *2^k<br>＞＞:右移运算符。右移k位 相当于/2^k</p>
+</blockquote>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>NS_OPTIONS位枚举的特点是可以使用位运算来处理枚举值，<strong>实际使用中可以用一个变量存储多个枚举值，表示互不影响的多个设置。</strong>比如系统中的UIViewAutoresizing定义如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">enum UIViewAutoresizing &#123;</div><div class="line">    UIViewAutoresizingNone                 = 0, // 000000</div><div class="line">    UIViewAutoresizingFlexibleLeftMargin   = 1 &lt;&lt; 0, // 000001</div><div class="line">    UIViewAutoresizingFlexibleWidth        = 1 &lt;&lt; 1,// 000010</div><div class="line">    UIViewAutoresizingFlexibleRightMargin  = 1 &lt;&lt; 2,// 000100</div><div class="line">    UIViewAutoresizingFlexibleTopMargin    = 1 &lt;&lt; 3,// 001000</div><div class="line">    UIViewAutoresizingFlexibleHeight       = 1 &lt;&lt; 4,// 010000</div><div class="line">    UIViewAutoresizingFlexibleBottomMargin = 1 &lt;&lt; 5,// 100000</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了说明问题这里就用UIViewAutoresizing举个例子。上面把对应的二进制写在了后面。现在要实现视图的宽和高自适应，<code>UIViewAutoResizingFlexibleWidth| UIViewAutoresizingFlexibleHeight。</code>。</p>
+<p>一般会这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UIViewAutoresizing resizing = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;</div></pre></td></tr></table></figure>
+<p>转换为二进制计算一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UIViewAutoresizing resizing = 000010 |010000 = 010010</div></pre></td></tr></table></figure>
+<p>这样就实现了变量保存多个枚举值。那么如何判断变量是否包含某个枚举值了，这的通过与操作。比如我要判断是否包含了<code>UIViewAutoresizingFlexibleWidth</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (resizing &amp; UIViewAutoresizingFlexibleWidth) &#123;</div><div class="line">       // UIViewAutoresizingFlexibleWidth is set</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>转换为二进制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (010010 &amp; 000010) &#123;</div><div class="line">       // UIViewAutoresizingFlexibleWidth is set</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>010010 &amp; 000010 = 000010 很明显不等于0。所以为YES。那么用一个不包含的试一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (resizing &amp; UIViewAutoresizingFlexibleTopMargin) &#123;</div><div class="line">       // UIViewAutoresizingFlexibleTopMargin is set</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>转为二进制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (010010 &amp; 001000) &#123;</div><div class="line">       // UIViewAutoresizingFlexibleTopMargin is set</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>很明显010010 &amp; 001000 = 0，所以能够知道resizing不包含UIViewAutoresizingFlexibleTopMargin。</p>
+<p><strong>通过以上的这种方式实现了一个变量保存多个枚举值。也就是NS_OPTIONS的原理。</strong></p>
+<h2 id="需要注意的地方"><a href="#需要注意的地方" class="headerlink" title="需要注意的地方"></a>需要注意的地方</h2><ol>
+<li>枚举命名方式尽量用系统的风格，比如枚举名为UIViewAutoresizing，具体的值为UIViewAutoresizingNone。简单来讲就是（枚举名+状态）</li>
+<li>如果要实现一个变量保存多个枚举值就用NS_OPTIONS。个人觉得用NS_OPTIONS完全可以替代NS_ENUM。只需要在使用的时候不用与、或操作就可以了</li>
+<li>用NS_ENUM与NS_OPTIONS宏来定义枚举类型，并指明其底层数据类型。这样做可以确保枚举是用开发者所选的底层数据类型实现出来的，而不会采用编译器所选的类型。</li>
+<li>在处理枚举类型的switch语句中不要实现default分支。这样的话，加入新枚举之后，编译器就会提示开发者：switch语句并未处理所有枚举。</li>
+<li><strong>预留一个枚举值，用于扩展或者用于表示没有的情况</strong>。</li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> recover </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> base recover </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[解决mac下Spotlight和Notes(记事本)搜索失效]]></title>
       <url>http://yoursite.com/2017/04/17/2017/4/%E8%A7%A3%E5%86%B3mac%E4%B8%8BSpotlight%E5%92%8CNotes%E6%90%9C%E7%B4%A2%E5%A4%B1%E6%95%88/</url>
       <content type="html"><![CDATA[<p>由于换了mac，之前的习惯是把一些常用的文字资料放在Notes（记事本）中，这样可以在手机和电脑中实现资料互通。但是最近换了新mac，notes能够从Icloud中拿到同步的资料，但是始终搜索不出来。而且spotlight搜索也不起任何作用。这里记录一下解决的方法。<br><a id="more"></a></p>
