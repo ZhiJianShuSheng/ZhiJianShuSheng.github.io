@@ -10,7 +10,7 @@
     
     <title>
         
-            分类: Blog | 
+            Dlib系列之在iOS中提取人脸特征点（第一篇） | 
         
         纸简书生
     </title>
@@ -48,7 +48,7 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="分类: Blog | 纸简书生">
+    <meta property="og:title" content="Dlib系列之在iOS中提取人脸特征点（第一篇） | 纸简书生">
     <meta property="og:description" content="人与人之间的差别在于，一、想得到和想不到，二、想得到且做到的想到但做不到；离开舒适区、自律是方法论。写作，阅读、锻炼、早起、旅行是方法。牢记方法论、价值观，躬行方法，让自己更好！">
 
     <!--[if lte IE 9]>
@@ -195,85 +195,275 @@
                         </button>
                     
 
-                    <!-- Index Module -->
-<div class="material-index mdl-grid">
-    
-    <div class="locate-thumbnail-symbol"></div>
+                    <!-- Post TOC -->
 
     
-        
-            <!-- Paradox Thumbnail -->
-            <div class="post_entry-module mdl-card mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#什么是dlib"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是dlib</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#打包成静态库"><span class="post-toc-number">2.</span> <span class="post-toc-text">打包成静态库</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#将静态库添加到项目中去"><span class="post-toc-number">3.</span> <span class="post-toc-text">将静态库添加到项目中去</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展阅读"><span class="post-toc-number">4.</span> <span class="post-toc-text">扩展阅读</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
     
         <!-- Custom Thumbnail -->
-        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50" style="background-image:url(http://upload-images.jianshu.io/upload_images/664334-6a635025e0c104d7.png)">
+        <div class="post_thumbnail-custom mdl-card__media mdl-color-text--grey-50" style="background-image:url(http://upload-images.jianshu.io/upload_images/664334-6b74196812cd5cc0.png)">
+    
+            <p class="article-headline-p">
+                Dlib系列之在iOS中提取人脸特征点（第一篇）
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar3.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>纸简书生</strong>
+        <span>4月 23, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
     
 
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/03/31/2017/3/Blog重头开始/">Blog重头开始</a></p>
-    </div>
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/dlib/">dlib</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/face-recognize/">face recognize</a>
+    </ul>
+    
 
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            　自从上次博客从hexo+github迁移到简书后，再也没有捣鼓相关的内容了。今天无意中看到了hexo的主题Material Theme，再次燃起兴趣……
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/03/31/2017/3/Blog重头开始/" target="_self">继续阅读</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar3.png" width="44px" height="44px" alt="纸简书生's avatar">
-            </div>
-            <div>
-                <strong>纸简书生</strong>
-                <span>3月 31, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/Blog/">Blog</a>
-            </span>
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
 
-            
+    
 
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Dlib系列之在iOS中提取人脸特征点（第一篇）&url=http://yoursite.com//2017/04/23/2017/4/Dlib系列之在iOS中提取人脸特征点（第一篇）/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
 </div>
 
-        
-        
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
+        <p>最近因为工作需要，在研究人脸识别，图像处理这块，这里简单记录一下。今天主要讲讲前期的准备工作，比如由C++制作OC的静态库。<br><a id="more"></a></p>
+<h2 id="什么是dlib"><a href="#什么是dlib" class="headerlink" title="什么是dlib"></a>什么是dlib</h2><p><img src="http://dlib.net/dlib-logo.png" alt=""><br>摘自官网：</p>
+<blockquote>
+<p>Dlib is a modern C++ toolkit containing machine learning algorithms and tools for creating complex software in C++ to solve real world problems. It is used in both industry and academia in a wide range of domains including robotics, embedded devices, mobile phones, and large high performance computing environments. Dlib’s open source licensing allows you to use it in any application, free of charge.</p>
+</blockquote>
+<p>简单来讲Dlib是一套包含机器学习算法的C++工具集，用来解决现实生活的问题。最为重要的就是free of charge免费。</p>
+<p>这个C++工具集包含了很多牛逼的特性：</p>
+<ul>
+<li>机器学习算法</li>
+<li>数值算法</li>
+<li>图像模型接口算法</li>
+<li><strong>图片处理</strong><ul>
+<li>高质量的人脸检测。<strong>这个部分是今天我们要用到的</strong></li>
+</ul>
+</li>
+<li>线程操作</li>
+<li>网络操作</li>
+<li>…..</li>
+</ul>
+<p>一句话，反正这个库就是牛逼。</p>
+<p><a href="http://dlib.net/" target="_blank" rel="external">官网文档</a><br><a href="https://github.com/davisking/dlib" target="_blank" rel="external">GitHub地址</a></p>
+<h2 id="打包成静态库"><a href="#打包成静态库" class="headerlink" title="打包成静态库"></a>打包成静态库</h2><p>由于dlib是用c++写的，虽然xcode知识Swift、OC、C、C++混编，但是对于这种三房库最好打成静态库。</p>
+<p>接下来就大致介绍一下如何完成这个步骤。</p>
+<ul>
+<li><p>前提条件</p>
+<ol>
+<li>X11(这个之前的mac是包含了的，但是现在需要自己下载安装)下载地址<a href="https://www.xquartz.org/" target="_blank" rel="external">X11</a>。相关的介绍可以看看这里<a href="https://support.apple.com/en-us/HT201341" target="_blank" rel="external">介绍</a></li>
+<li>Xcode</li>
+<li>cmake，如何之前玩过c或者c++这个应该安装过了。如果没安装过可以通过homebrew安装</li>
+</ol>
+</li>
+<li><p>步骤</p>
+<ol>
+<li>将项目dlib clone 到本地。项目地址<code>https://github.com/davisking/dlib.git</code></li>
+<li>在终端里面打开刚才clone下来的项目里面的examples目录。<br> <img src="http://upload-images.jianshu.io/upload_images/664334-aeb8b4d7799825ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+<li>终端执行<code>mkdir build</code></li>
+<li>终端执行<code>cd build</code></li>
+<li>终端执行<code>cmake -G Xcode ..</code></li>
+<li><p>终端执行<code>cmake --build . --config Release</code> <strong>这一步等的时间比较长，耐心一点</strong></p>
+<p>如果没有出现异常，最后会出现<br><img src="http://upload-images.jianshu.io/upload_images/664334-5c9a313e90678b95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">这就说明成功了。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>这一串命令最终会产生一个<code>dlib_build</code>目录，里面就是编译这个库的xcode项目。在这个项目里面可以根据你的需要设置这个SDK支持的架构和支持的平台（iOS、Mac）。</p>
+<p>特别注意，需要额外添加一些编译标识和dlib依赖的三方库。<strong>可以直接根据examples.xcproject项目来查看具体的设置</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-676f7df31ab560b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>通过上面的方式就制作好了一个包含dlib的静态库。</p>
+<p>下面是生产.a的目录<br><img src="http://upload-images.jianshu.io/upload_images/664334-d06f9ffd05e2368e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>查看.a支持的架构可以通过<code>lipo -info xxx.a</code>查看。比如我这里就是<br><img src="media/14929190666528/14929242438453.jpg" alt=""></p>
+<h2 id="将静态库添加到项目中去"><a href="#将静态库添加到项目中去" class="headerlink" title="将静态库添加到项目中去"></a>将静态库添加到项目中去</h2><p>刚才制作好了libdlib.a。接下来就是去使用它。</p>
+<ol>
+<li><p>将刚才生产的.a和dlib的库文件拖到同一个文件夹。<br><img src="http://upload-images.jianshu.io/upload_images/664334-05f88ee04ea3e683.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>将这两个加到项目实体中。<br><img src="http://upload-images.jianshu.io/upload_images/664334-e921cf07256210d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>然后将libdlib.a拖到项目中，<strong>特别注意不要把库文件dlib目录下的文件拖进去。</strong>在文件中引用一下库文件。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#include &lt;dlib/image_processing.h&gt;</div><div class="line">#include &lt;dlib/image_io.h&gt;</div></pre></td></tr></table></figure>
+<p>之后会报找不到头文件。</p>
+<ol>
+<li><p>然后设置文件夹搜索<br><img src="http://upload-images.jianshu.io/upload_images/664334-b600e7f7db4987b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>然后编译，不出意外会报如下的错。<br><img src="http://upload-images.jianshu.io/upload_images/664334-2eb732ae1cf25bab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>添加需要的framework。非常重要。麻蛋让我踩了好久的坑。<br><img src="http://upload-images.jianshu.io/upload_images/664334-7493b62140bed4da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>然后添加<code>Custom Compiler Flags</code>中的<code>Other C Flags</code>。下面这些flag定义了在预处理阶段对libdlib.a的某些特性的宏。</p>
+<ul>
+<li>-DDLIB_JPEG_SUPPORT</li>
+<li>-DDLIB_NO_GUI_SUPPORT</li>
+<li>-DNDEBUG -DDLIB_USE_BLAS</li>
+<li>-DDLIB_USE_LAPACK<br><img src="http://upload-images.jianshu.io/upload_images/664334-e33dc50275c14150.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+</ul>
+</li>
+<li>添加预处理宏Preprocessor Macros。<ul>
+<li>DLIB_JPEG_SUPPORT</li>
+<li>DLIB_NO_GUI_SUPPORT</li>
+<li>NDEBUG -DDLIB_USE_BLAS</li>
+<li>DLIB_USE_LAPACK<br><img src="http://upload-images.jianshu.io/upload_images/664334-0e2c2fe9987b10f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
+</ul>
+</li>
+<li>现在编译就能够完全通过了。</li>
+</ol>
+<p>接下来就是进行代码编写实现人脸特征点提取了。下次再讲吧！</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="http://stackoverflow.com/questions/39807835/how-to-use-dlib-in-xcode-c-console-application" target="_blank" rel="external">How to use dlib in Xcode C++ console application</a><br><a href="http://www.learnopencv.com/facial-landmark-detection/" target="_blank" rel="external">Facial Landmark Detection</a><br><a href="http://stackoverflow.com/questions/23634940/opencv2-framework-not-compile-with-linker-flag-objc" target="_blank" rel="external">opencv2.framework not compile with linker flag -ObjC</a></p>
 
     
-
-    
-        <script>
-    var randomNum;
-
-    var locatePost = $('.locate-thumbnail-symbol').next();
-    for(var i = 0; i < 5; i++) {
-        randomNum = Math.floor(Math.random() * 19 + 1);
-
-        locatePost.children('.post_thumbnail-random').attr('id', 'random_thumbnail-'+randomNum);
-        locatePost.children('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')')
-
-        locatePost = locatePost.next();
-    }
-</script>
 
     
 </div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/04/22/2017/4/谈谈位枚举NS_OPTIONS/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
 
 
                     
