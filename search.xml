@@ -4,6 +4,106 @@
   
     
     <entry>
+      <title><![CDATA[基础回顾之存储类、链接与内存管理]]></title>
+      <url>http://yoursite.com/2017/04/30/2017/4/%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE%E4%B9%8B%E5%AD%98%E5%82%A8%E7%B1%BB%E3%80%81%E9%93%BE%E6%8E%A5%E4%B8%8E%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+      <content type="html"><![CDATA[<p>做技术，越做到后面越觉得基础、底层的才是越难得，也会越有技术含量的。最近做的项目有关音视频、图像处理，涉及到的都死c和c++相关的代码。遇到了问题才发现，c和c++才是通用大法。这两块没学好，那也只有玩一玩应用层、UI这些东西。抽空整理下。</p>
+<a id="more"></a>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p>四种：</p>
+<ul>
+<li>多个文件共享的变量</li>
+<li>特定文件每个函数共享的变量</li>
+<li>某个函数特有的变量</li>
+<li>某个函数一个代码块的变量</li>
+</ul>
+<p>一个C变量的作用域可以是代码块作用域，函数作用域，文件作用域，基本概念就不说了。</p>
+<p>需要注意的几点：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span> ; i++) &#123;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d"</span>, i);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>这里<code>i</code>的作用域是整个for循环。</p>
+<p>一个所有函数之外定义的变量就是文件作用域。整个文件可以访问该变量。也叫全局作用域</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CTest.h"</span></span></div><div class="line"><span class="keyword">int</span> a = <span class="number">4</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span> ; i++) &#123;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d"</span>, i);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, a);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</div><div class="line">    a = <span class="number">6</span>;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, a);</div><div class="line">    <span class="keyword">return</span> a;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
+<li>外部链接：多个文件使用</li>
+<li>内部链接：当前文件使用</li>
+<li>空连接：函数代码块使用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> a = <span class="number">4</span>; <span class="comment">// 外部链接</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">5</span>; <span class="comment">// 内部链接、文件私有</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="存储时期-变量在内存中生存的时间"><a href="#存储时期-变量在内存中生存的时间" class="headerlink" title="存储时期(变量在内存中生存的时间)"></a>存储时期(变量在内存中生存的时间)</h2><ul>
+<li>静态存储：程序执行期间一直存储，<strong>文件作用域（内部和外部）的变量具有静态存储时期</strong>。文件作用域中特别注意用static表明链接类型而并非存储时期。一个使用了static生命的文件作用域变量表示这个变量具有内部作用域。</li>
+<li>自动存储：代码块作用域的变量。</li>
+</ul>
+<p>5种存储类：自动，寄存器，代码作用域静态，外部静态，内部静态。下面这种表总结了上面的多种情况。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-a707c14717537c95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>重点说明一下寄存器变量：寄存处变量是存储在CPU的寄存器中，比一般的内存要快很多。但是有一个问题就是寄存器变量的地址是无法获取的。</p>
+</blockquote>
+<p>把变量定义下所有函数之外，就创建了一个外部变量，为了使程序清晰，可以在使用使用外部变量的函数中通过extern来再次声明。如果变量在别的文件定义，使用extern来声明就是必须的。<strong>这里想一想OC中的写第三方库的时候，为了让其他模块能够访问某个变量就是通过这种方式来达到目的的。</strong></p>
+<p>比如YYWebImageSetter中。<br>.h</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">extern NSString *const _YYWebImageFadeAnimationKey;</div><div class="line">extern const NSTimeInterval _YYWebImageFadeTime;</div><div class="line">extern const NSTimeInterval _YYWebImageProgressiveFadeTime;</div></pre></td></tr></table></figure>
+<p>.m</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSString *const _YYWebImageFadeAnimationKey = @&quot;YYWebImageFade&quot;;</div><div class="line">const NSTimeInterval _YYWebImageFadeTime = 0.2;</div><div class="line">const NSTimeInterval _YYWebImageProgressiveFadeTime = 0.4;</div></pre></td></tr></table></figure>
+<p>函数也是具有存储类。<strong>函数默认是外部的，可以被其他文件中的函数调用，静态函数只可以在定义它的文件中使用（用static）</strong></p>
+<blockquote>
+<p>使用static可以防止名字的冲突，为文件定义一个私有的变量或者函数。<strong>想想平时我们在定义常量的时候，有时候会出现冲突，OC中用static解决的。应该有些同学有印象的。</strong></p>
+</blockquote>
+<h2 id="分配内存"><a href="#分配内存" class="headerlink" title="分配内存"></a>分配内存</h2><p>系统自动分配内存：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> x;</div><div class="line"><span class="keyword">char</span> hello = <span class="string">"hello world"</span>;</div></pre></td></tr></table></figure>
+<p>系统将会预留出存储float或字符串的足够内存空间。也可以指定预留多少内存空间：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> plates[<span class="number">100</span>];</div></pre></td></tr></table></figure>
+<p>声明了100个内存位置，每个位置可以存储一个int值。这里的plate和上面的x、hello变量可以理解为内存的标识符。所以我们可以用x、hello来标识、获取这些内存数据。</p>
+<h3 id="malloc-amp-amp-free-amp-amp-calloc"><a href="#malloc-amp-amp-free-amp-amp-calloc" class="headerlink" title="malloc&amp;&amp;free&amp;&amp;calloc"></a>malloc&amp;&amp;free&amp;&amp;calloc</h3><p>用于动态开辟内存。函数<code>void* malloc( size_t size );</code></p>
+<p>函数说明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Allocates size bytes of uninitialized storage.</div><div class="line">If allocation succeeds, returns a pointer to the lowest (first) byte in the allocated memory block that is suitably aligned for any object type.</div><div class="line">If size is zero, the behavior is implementation defined (null pointer may be returned, or some non-null pointer may be returned that may not be used to access storage, but has to be passed to free).</div><div class="line"></div><div class="line">malloc is thread-safe: it behaves as though only accessing the memory locations visible through its argument, and not any static storage.</div><div class="line">A previous call to free or realloc that deallocates a region of memory synchronizes-with a call to malloc that allocates the same or a part of the same region of memory. This synchronization occurs after any access to the memory by the deallocating function and before any access to the memory by malloc. There is a single total order of all allocation and deallocation functions operating on each particular region of memory.</div></pre></td></tr></table></figure>
+<p>传入所需要的内存字节数，然后malloc找到内存中一个大小适合的快，内存是匿名的，<strong>不像上面可以用定义float x;x用于标识。不过返回的是一个开辟内存的第一个字节的地址。虽然没有为它指定名字，但是我们可以通过指针来接受返回的值来访问那块内存。</strong></p>
+<p>因为char代表一个字节，所以经常将malloc定义为指向char的指针类型。但是后来又了新的类型——————通用型指针（void <code>*</code>）。这样就可以返回其他类型的了。特别注意<strong>如果malloc找不到所需的空间，就会返回空指针。比如传入一个负数就会返回NULl</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">double *dbl;</div><div class="line">dbl = malloc(30 * sizeof(double));</div></pre></td></tr></table></figure>
+<p>请求30个double类型值的空间，并把dbl指向该空间的所在的起始位置。然后就可以使用数组那样使用它。<strong>简单来讲可以dbl[0],dbl[1]访问</strong></p>
+<p>开辟了内存，必定要释放内存。用free释放内存。对应到OC就是那句内存管理的至理名言<strong>谁开辟、谁释放（alloc、release）</strong></p>
+<p>一次malloc，应该调用一次free。free的参数是malloc返回的地址，释放掉先前分配的内存。不能使用free来释放通过其他形式分配的内存，比如声明一个数组。</p>
+<h3 id="例子强调一下free的重要性"><a href="#例子强调一下free的重要性" class="headerlink" title="例子强调一下free的重要性"></a>例子强调一下free的重要性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">void memoryTest() &#123;</div><div class="line">    double array[2000];</div><div class="line">    for (int i = 0; i&lt; 1000; i++) &#123;</div><div class="line">        testCopy(array, 2000);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">void testCopy(double arr[], int count) &#123;</div><div class="line">    double *temp = (double *)malloc(count * sizeof(double));</div><div class="line">    </div><div class="line">    // No free</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第一次调用testCopy,创建指针temp,并使用malloc开辟了2000 <em> 16，一个32000个字节。当函数终止，temp作为自动变量被销毁，<em>*但是它指向的32000个字节的内存仍然存在，并且无法访问这些内存，因为地址不见了（temp销毁），由于没有调用free,那么就不可以再次使用这些内存。</em></em></p>
+<p>第二次调用testCopy，又创建一个temp,但是第一次的32000字节的块已经不能再用了。所以malloc不得不再去开辟一块新的内存地址。当函数终止，这块内存同样没有调用free,创建的内存同样不能被访问。</p>
+<blockquote>
+<p>循环1000次，就是32000000个字节。已经有3200万字节在内存中中不能使用。<strong>这就是在做iOS开发中MRC时代经常遇到的内存泄漏。</strong></p>
+</blockquote>
+<p>为了说明问题，这里我用xcode测试了一下，把循环次数改为了100000000。</p>
+<ul>
+<li><p>没有加free之前。<br><img src="http://upload-images.jianshu.io/upload_images/664334-3af8bb29b5425122.gif?imageMogr2/auto-orient/strip" alt=""></p>
+</li>
+<li><p>加free之后。<br><img src="http://upload-images.jianshu.io/upload_images/664334-04e8d9cb332347d7.gif?imageMogr2/auto-orient/strip" alt=""></p>
+</li>
+</ul>
+<p>对比上面很明显能看到两者的区别。</p>
+<p>calloc与malloc最大的区别是calloc会把开辟的全部位置为0。使用方式和malloc类似，同样需要用free释放内存。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">long</span> *test;</div><div class="line">test = (<span class="keyword">long</span> *)<span class="built_in">calloc</span>(<span class="number">100</span>, <span class="keyword">sizeof</span>(<span class="keyword">long</span>));</div></pre></td></tr></table></figure>
+<p>开辟了可以容乃100个long类型的内存空间。</p>
+<h2 id="常见的限定词"><a href="#常见的限定词" class="headerlink" title="常见的限定词"></a>常见的限定词</h2><h3 id="const"><a href="#const" class="headerlink" title="const"></a>const</h3><p>普通类型前，标识这个值不可变。而用在指针的时候情况就分多种了</p>
+<p>因为指针存在，指针不可变还是指向的值不可变。</p>
+<ul>
+<li><code>const float *pf</code>（等同于<code>float const * pf</code>）:表示pf指向一个常量浮点型数值。<strong>但是pf本身的值可以改变。比如它可以指向另一个const值</strong></li>
+<li><code>float * const pt</code>:表示pt是一个常量指针，他总是指向同一个地址，但是地址里面的内容可以改变。</li>
+<li><code>const float * const pfc</code>:表示pfc是个常量指针，而且指向的地址内容也不能变。</li>
+</ul>
+<p><strong>记忆方式，const位于<code>*</code>左边代表指向的值不可变，位于<code>*</code>右边指针不可变</strong></p>
+]]></content>
+      
+        <categories>
+            
+            <category> language </category>
+            
+            <category> base </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> recover </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Dlib系列之在iOS中提取人脸特征点（第一篇）]]></title>
       <url>http://yoursite.com/2017/04/23/2017/4/Dlib%E7%B3%BB%E5%88%97%E4%B9%8B%E5%9C%A8iOS%E4%B8%AD%E6%8F%90%E5%8F%96%E4%BA%BA%E8%84%B8%E7%89%B9%E5%BE%81%E7%82%B9%EF%BC%88%E7%AC%AC%E4%B8%80%E7%AF%87%EF%BC%89/</url>
       <content type="html"><![CDATA[<p>最近因为工作需要，在研究人脸识别，图像处理这块，这里简单记录一下。今天主要讲讲前期的准备工作，比如由C++制作OC的静态库。<br><a id="more"></a></p>
