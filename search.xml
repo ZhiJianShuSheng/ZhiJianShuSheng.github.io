@@ -4,6 +4,90 @@
   
     
     <entry>
+      <title><![CDATA[如何阅读开源项目]]></title>
+      <url>http://yoursite.com/2017/06/07/2017/6/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/</url>
+      <content type="html"><![CDATA[<p>最近这段时间一直比较忙，相对于之前少了很多的学习时间。抽空看几篇源码分析的文章，大多数都是大同小异的思路，把英文翻译为中文而已。鉴于关于介绍如何阅读开源项目的文章比较稀少，常言道<strong>授人予鱼不如授人予渔</strong>。希望这篇文章能够给准备阅读三方源码的同学一些启示。<br><a id="more"></a></p>
+<h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p><img src="http://upload-images.jianshu.io/upload_images/664334-cd5448573458a33f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><strong>在阅读源码之前最好明确一下阅读的目的，这样有助于阅读的深度和时间的控制。</strong>比如如果是为了解决项目中的bug，则可以阅读bug所涉及的部分；如果是为了提高自己的编码能力，学习设计技巧，则就需要更为深入的阅读。</p>
+<p>因为阅读源码其实是一件非常辛苦的事情，尤其是分析一些大型开源项目的源码，如果毫无目的的阅读会浪费大量的时间。<strong>而且阅读源码也是一个长期的过程，不可能一天分析完Spring源码的分析</strong>，所以在分析源码之前一定要有一个明确的认识，不仅仅只是翻译英文注释，花大量的时间是在所难免的。</p>
+<p>对笔者而言阅读源码的目的基本上可以分为如下几种：</p>
+<ol>
+<li>提高自己的编码能力，学习设计思想。</li>
+<li>解决工作中所用第三方库遇到的bug。</li>
+<li>借鉴开源代码，私有化别人的代码，完成工作需求。</li>
+</ol>
+<p>当然不排除某些大神，读源码纯粹是了找开源代码漏洞或者想改进该项目。毕竟这种牛逼的人是少数。当我们明确了阅读的目的就可以大致确定所需要花费的时间及精力了。</p>
+<h1 id="源码获取"><a href="#源码获取" class="headerlink" title="源码获取"></a>源码获取</h1><p><img src="http://upload-images.jianshu.io/upload_images/664334-d759e5a41ea7b7ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>获取源码的地方太多了，最负有盛名的就是<a href="https://github.com/search?utf8=%E2%9C%93&amp;q=&amp;type=Repositories&amp;ref=searchresults" target="_blank" rel="external">GitHub</a>。除此之外还有<a href="https://sourceforge.net/" target="_blank" rel="external">sourceforge</a>，Google和Apple也有其开源项目下载地址，分别是<a href="https://opensource.google.com/" target="_blank" rel="external">Google OpenSource</a>、<a href="https://opensource.apple.com/" target="_blank" rel="external">Apple OpenSource</a>。国内有比较出名的有<a href="https://www.oschina.net/" target="_blank" rel="external">开源中国</a>，<a href="https://git.oschina.net/" target="_blank" rel="external">码云(开源中国代码托管平台)）</a>，<a href="https://coding.net/user" target="_blank" rel="external">Coding</a>。</p>
+<p>整理一下：</p>
+<ol>
+<li><a href="https://github.com/search?utf8=%E2%9C%93&amp;q=&amp;type=Repositories&amp;ref=searchresults" target="_blank" rel="external">GitHub</a></li>
+<li><a href="https://sourceforge.net/" target="_blank" rel="external">sourceforge</a></li>
+<li><a href="https://opensource.google.com/" target="_blank" rel="external">Google OpenSource</a></li>
+<li><a href="https://opensource.apple.com/" target="_blank" rel="external">Apple OpenSource</a></li>
+<li><a href="https://www.oschina.net/" target="_blank" rel="external">开源中国</a></li>
+<li><a href="https://git.oschina.net/" target="_blank" rel="external">码云(开源中国代码托管平台)）</a></li>
+<li><a href="https://coding.net/user" target="_blank" rel="external">Coding</a></li>
+</ol>
+<p>在进行搜索的开源项目有很多搜索技巧，就拿GitHub举个例子。想高效的使用GitHub，一定要把<a href="https://github.com/search/advanced" target="_blank" rel="external"> advanced search</a>、<a href="https://help.github.com/articles/searching-github/#types-of-searches" target="_blank" rel="external">prefixes</a>看一下。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/664334-60bdc08289a60f5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>除了上面提到的开源项目下载地址，还有很多其他的地方可以获取到源码，这里就不多提了。</p>
+<h1 id="分析方法"><a href="#分析方法" class="headerlink" title="分析方法"></a>分析方法</h1><p><img src="http://upload-images.jianshu.io/upload_images/664334-a4c7e4dca05a7220.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><strong>阅读方法才是今天的重点，笔者一般是按照下面的步骤开始。</strong></p>
+<ol>
+<li>基本思想就是先对项目有个大致的了解。比如关键的类有哪些，各个文件夹之间的关系。</li>
+<li>然后从最核心的API开始，先使用UML里的类图建立静态结构，分析出类与类之间的关系（继承，组合，实现，依赖，关联等等）。<strong>这一步是精读的必经之路，如果想要彻底理解，画UML图无意识最直接的方式。</strong></li>
+<li>配合IDE工具分析核心流程，理解项目是如何工作的。</li>
+<li>着重看项目中添加的注释，因为一般开源项目中的注释都非常重要。</li>
+</ol>
+<p>接下来分下面几个部分详细介绍。</p>
+<ul>
+<li>看：静态对代码进行分析，看相关资料，代码逻辑</li>
+<li>跑：将项目在IDE里面跑起来，通过IDE调试参数，加Log等。</li>
+<li>查：阅读过程中肯定会遇到不懂的，这时候需要通过搜索引擎来解决你的疑惑。</li>
+</ul>
+<h2 id="看"><a href="#看" class="headerlink" title="看"></a>看</h2><p>这个部分是非常基础但是重要的部分，主要完成对代码的基本感知。从静态的角度理解代码。</p>
+<h3 id="现有资料"><a href="#现有资料" class="headerlink" title="现有资料"></a>现有资料</h3><p>在我们准备阅读某个开源项目之前，如果搜集了相关的资料的话，对我理解起来非常有帮助。也就是常说的<strong>站在巨人的肩膀上</strong>。</p>
+<p>主要分为两种：</p>
+<ol>
+<li>项目官方文档比如Wiki</li>
+<li>使用者分析的文档比如项目源码分析。</li>
+</ol>
+<p>GitHub上的开源项目大部分都有文档介绍，好一点的项目都会有对应的Wiki。<strong>除此之外开源项目的Issue也是我们需要关心的。往往这些Isuue对应到项目中都是核心部分，也就是我们非常值得关注的地方。</strong>如下图所示，一定要善用这些选项。因为这些都是前人踩过的坑，对于项目理解非常有用。<br><img src="http://upload-images.jianshu.io/upload_images/664334-573526a334ebaf12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>除了项目本身的文档外，还有一种形式的文档也需要我们注意。这类文档就是别人对这个项目写过的一些源码分析文章。这类文章已经对项目分析过一次了，先阅读完之后，会对我们自己去阅读源码起到一个理清思路，引路的作用。</p>
+<p>但是有些大型的开源项目文档太多了，就官方说明文档就不可能一次看完，比如java中的Spring，看完文档也是不现实的。<strong>这个时候就应该把文档与代码调试结合在一起。效率会高不少。</strong>而且这类型的大型项目至少也得花一年半载才能弄清楚。</p>
+<h3 id="代码内注释"><a href="#代码内注释" class="headerlink" title="代码内注释"></a>代码内注释</h3><p><strong>对于开源项目内注释一定，一定要仔细看看</strong>。在使用第三方库的时候，往往因为没有仔细阅读代码内注释而导致滥用方法。</p>
+<p>如下图是iOS开源项目CocoaAsyncSocket一段代码内注释<br><img src="http://upload-images.jianshu.io/upload_images/664334-0faf30bc20d85d8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如果没有仔细看代码内注释，没有注意到必须设置代理和代理队列，遇到报错了根本不知道怎么发生的。</p>
+<p>代码内注释是作者着重想传达给使用者的信息，所以切记切记，一定要仔细看代码内注释。但是好多人都误以为把注释看懂就是源码分析了，而且好多源码分析文章也是这样写的，把注释翻译一下，说明一下用途。</p>
+<h2 id="跑"><a href="#跑" class="headerlink" title="跑"></a>跑</h2><p>这个过程是对代码的深入理解部分，通过改变函数参数，运行环境等。不同的语言用了不同的IDE，大部分IDE的作用都相差不多，都可以追溯堆栈，查看变量信息等。所以思路都是相同的。</p>
+<h3 id="IDE调试"><a href="#IDE调试" class="headerlink" title="IDE调试"></a>IDE调试</h3><p>项目编译出来，运行加log，试着修改一些数据和代码，看看有什么变化。这是最为常用的方法。灵活使用IDE的debugger，而debugger最重要的功能是获取call stack。查看变量的变化情况，在你不知道有什么用的函数里加个断点，显示出来的call stack都能让你对系统有更清晰的认识。</p>
+<p>关于IDE的调试使用常用的断点调试，变量跟中这些，这里就不多讲了。</p>
+<h4 id="调试技巧"><a href="#调试技巧" class="headerlink" title="调试技巧"></a>调试技巧</h4><p>很多时候我们不知道某个变量或者某个变量具体的作用，<strong>那么这个时候就可以用到对CUD（Create,Update,Delete）思想</strong>。</p>
+<p><strong>调试中的CUD具体来讲就是对源代码的类、函数、变量进行增加、修改、删除</strong>。如果一直停留在<code>看</code>源码的基础上很有可能不能透彻的理解，当我们掌握了代码设计规则，使用CUD方式可以加深理解，以及验证我们的猜想是否正确。</p>
+<p><strong>特别注意，在实现项目中一定不要去修改第三方的源码，有时候可以通过修改第三方源码来达到暂时的目的，但是往往在后期维护，升级方面必将付出惨重的代价。这里指的CUD只适合在分析源码的时候。</strong></p>
+<h2 id="查"><a href="#查" class="headerlink" title="查"></a>查</h2><p><img src="http://upload-images.jianshu.io/upload_images/664334-a6d7c0f50fe4e75a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>在分析源码的过程中，肯定会遇到自己不懂的地方，对于这种问题，大部分靠自己现有的知识很有可能无法理解，这个时候就需要实在不懂就问了。Google、相关社区、GitHub Issue、Stackoverflow多搜多问。</p>
+<p>查这个步骤应该是贯穿整个过程的，但是也得注意不是一遇到问题就上网查，而是应该在自己思考之后，得不到解答才去查。很多同学养成了一遇到问题就Google，百度，其实从长远来看不利于自己的提升。</p>
+<h1 id="分析总结"><a href="#分析总结" class="headerlink" title="分析总结"></a>分析总结</h1><p>走完上面的步骤之后，基本上对一个项目源码掌握了。但是这个层次还是有点low。仅仅停留在理解的阶段，如果想做得更好就需要对项目的设计进行分析，看看有没有可以改进的地方，甚至完全试一试自己能不能针对某个模块改进一下。</p>
+<p>这个阶段类似于<code>提升、创新</code>的程度，建立在见多识广的基础之上，对于阅读开源项目不多的同学还是非常有难度的。</p>
+<h1 id="整理成文"><a href="#整理成文" class="headerlink" title="整理成文"></a>整理成文</h1><p>最后的阶段就是把自己分析的内容整理成为文档，分享出来。这也是提升自己能力的一个重要渠道，在写文章的时候，会强迫自己对那些不清楚的知识点加深理解。</p>
+<p>文章内容应包括自己整理的UML图，核心类的实现，代码设计技巧，以及告知读者使用该第三方的时候需要注意的问题。</p>
+<p>在写文章的时候需要注意，不要过多的延伸。毕竟一个点所涉及的知识网太大了，选择其中比较核心的几点阐述即可。</p>
+<h1 id="EOF"><a href="#EOF" class="headerlink" title="EOF"></a>EOF</h1>]]></content>
+      
+        <categories>
+            
+            <category> base </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> think </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[XCode多项目(xcodeproj)使用Cocoapod管理]]></title>
       <url>http://yoursite.com/2017/05/13/2017/5/XCode%E5%A4%9A%E9%A1%B9%E7%9B%AE(xcodeproj)%E4%BD%BF%E7%94%A8Cocoapod%E7%AE%A1%E7%90%86/</url>
       <content type="html"><![CDATA[<p>最近比较忙，空闲的时候看的是关于算法方面的。关于算法自己的脑子不够用想写点东西，但是感觉还没有很熟练。所以先写点其他的。<br><a id="more"></a></p>
@@ -690,8 +774,9 @@ Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Sp
 <li><p><a href="https://github.com/Josin22/JSDownloadView" target="_blank" rel="external">JSDownloadView</a><br>  <img src="https://raw.githubusercontent.com/Josin22/JSDownloadView/master/JSDownloadViewDemo/Source/download.gif" alt=""></p>
 </li>
 <li><a href="https://github.com/daria-kopaliani/DAProgressOverlayView" target="_blank" rel="external">DAProgressOverlayView</a><br>  <img src="https://github.com/daria-kopaliani/DAProgressOverlayView/raw/master/DAProgressOverlayView.gif" alt=""></li>
-<li><a href="https://github.com/Karthus1110/ZYDownloadProgress" target="_blank" rel="external">ZYDownloadProgress</a><br>  <img src="https://camo.githubusercontent.com/f457fa6aeb5b8e67bd3f01bb95d41eb0edbc7aad/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f313234393530352d613134336261316535333063653337322e6769663f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970" alt=""><h3 id="图表"><a href="#图表" class="headerlink" title="图表"></a>图表</h3></li>
-<li><a href="https://github.com/kevinzhow/PNChart" target="_blank" rel="external">PNChart</a>：国人写的。目前是GitHub排名第一个iOS图表类三方库<br><img src="https://camo.githubusercontent.com/a0c2be4b0b43f84c920e983009ef4c260e234307/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f666172736869642e67686f64732e6769746875622f706e63686172742d6c696e6563686172742d736d6f6f74682e706e67" alt=""></li>
+<li><a href="https://github.com/Karthus1110/ZYDownloadProgress" target="_blank" rel="external">ZYDownloadProgress</a><br>  <img src="https://camo.githubusercontent.com/f457fa6aeb5b8e67bd3f01bb95d41eb0edbc7aad/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f313234393530352d613134336261316535333063653337322e6769663f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970" alt=""></li>
+<li><a href="https://github.com/sgryschuk/SGNavigationProgress" target="_blank" rel="external">SGNavigationProgress</a>:导航栏下面进度条<br><img src="https://camo.githubusercontent.com/8a1b67ef84b0353148e89dcbea6b44b22292ac07/68747470733a2f2f7261772e6769746875622e636f6d2f73677279736368756b2f53474e617669676174696f6e50726f67726573732f6d61737465722f53637265656e53686f744d61736b2e706e67" alt=""><h3 id="图表"><a href="#图表" class="headerlink" title="图表"></a>图表</h3></li>
+<li><a href="https://github.com/kevinzhow/PNChart" target="_blank" rel="external">PNChart</a>：国人写的。目前是GitHub排名第一个iOS图表类三方库<br><img src="https://camo.githubusercontent.com/a0c2be4b0b43f84c920e983009ef4c260e234307/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f666172736869642e67686f64732e6769746875622f706e63686172742d6c696e6563686172742d736d6f6f74682e706e67" alt=""><h3 id="区段滑动"><a href="#区段滑动" class="headerlink" title="区段滑动"></a>区段滑动</h3><a href="https://github.com/maxep/MXSegmentedPager" target="_blank" rel="external">MXSegmentedPager</a><br><img src="https://github.com/maxep/MXSegmentedPager/blob/master/Example-objc/SimpleView.gif" alt=""></li>
 </ul>
 <h2 id="二、应用设置"><a href="#二、应用设置" class="headerlink" title="二、应用设置"></a>二、应用设置</h2><h3 id="国际化"><a href="#国际化" class="headerlink" title="国际化"></a>国际化</h3><ul>
 <li><a href="https://github.com/stefanceriu/SCStringsUtility" target="_blank" rel="external">SCStringsUtility</a> 快速国际化，通过导入CSV实现快捷导入。</li>
@@ -737,6 +822,31 @@ Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Sp
     </entry>
     
     <entry>
+      <title><![CDATA[最近遇到的问题]]></title>
+      <url>http://yoursite.com/2017/04/05/2017/4/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+      <content type="html"><![CDATA[<p>记录一下最近遇到的问题。<br><a id="more"></a></p>
+<h1 id="libpng-error-CgBI-unhandled-critical-chunk"><a href="#libpng-error-CgBI-unhandled-critical-chunk" class="headerlink" title="libpng error: CgBI: unhandled critical chunk"></a>libpng error: CgBI: unhandled critical chunk</h1><p>这个错是出现在Xcode7.3之后。解决办法：在buildsetting里面，将<code>Remove Text Metadata From PNG Files</code>的值改为<code>NO</code>。默认值为YES.</p>
+<p>因为Xcode7.3之后，默认会将元数据从png格式的文件中移除。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> issue </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> png </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[typeof、 __typeof 、及__typeof __的区别]]></title>
       <url>http://yoursite.com/2017/04/05/2017/4/typeof%E5%90%84%E4%B8%AA%E4%B8%8D%E5%90%8C/</url>
       <content type="html"><![CDATA[<p>这个问题是一个同事在看一些第三方源码的时候产生的疑惑，顺便就问了我。<br><a id="more"></a></p>
@@ -760,31 +870,6 @@ Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Sp
         <tags>
             
             <tag> compiler </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[最近遇到的问题]]></title>
-      <url>http://yoursite.com/2017/04/05/2017/4/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-      <content type="html"><![CDATA[<p>记录一下最近遇到的问题。<br><a id="more"></a></p>
-<h1 id="libpng-error-CgBI-unhandled-critical-chunk"><a href="#libpng-error-CgBI-unhandled-critical-chunk" class="headerlink" title="libpng error: CgBI: unhandled critical chunk"></a>libpng error: CgBI: unhandled critical chunk</h1><p>这个错是出现在Xcode7.3之后。解决办法：在buildsetting里面，将<code>Remove Text Metadata From PNG Files</code>的值改为<code>NO</code>。默认值为YES.</p>
-<p>因为Xcode7.3之后，默认会将元数据从png格式的文件中移除。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> iOS </category>
-            
-            <category> issue </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> png </tag>
             
         </tags>
         
