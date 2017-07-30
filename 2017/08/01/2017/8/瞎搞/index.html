@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.2.6 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            So Terrible | 
+        
+        纸简书生
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon1.jpeg">
+    <link rel="icon" sizes="192x192" href="/img/favicon1.jpeg">
+    <link rel="apple-touch-icon" href="/img/favicon1.jpeg">
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="纸简书生">
+    <meta name="description" content="人与人之间的差别在于，一、想得到和想不到，二、想得到且做到的想到但做不到；离开舒适区、自律是方法论。写作，阅读、锻炼、早起、旅行是方法。牢记方法论、价值观，躬行方法，让自己更好！">
+    <meta name="keywords" content="纸简书生、iOS、Android、Java">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="纸简书生">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="So Terrible | 纸简书生">
+    <meta property="og:description" content="人与人之间的差别在于，一、想得到和想不到，二、想得到且做到的想到但做不到；离开舒适区、自律是方法论。写作，阅读、锻炼、早起、旅行是方法。牢记方法论、价值观，躬行方法，让自己更好！">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="/css/material.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+    <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+    body, html {
+        font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    }
+
+    a {
+        color: #00838F;
+    }
+
+    .mdl-card__media,
+    #search-label,
+    #search-form-label:after,
+    #scheme-Paradox .hot_tags-count,
+    #scheme-Paradox .sidebar_archives-count,
+    #scheme-Paradox .sidebar-colored .sidebar-header,
+    #scheme-Paradox .sidebar-colored .sidebar-badge{
+        background-color: #0097A7 !important;
+    }
+
+    /* Sidebar User Drop Down Menu Text Color */
+    #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+    #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+        color: #0097A7 !important;
+    }
+
+    #post_entry-right-info,
+    .sidebar-colored .sidebar-nav li:hover > a,
+    .sidebar-colored .sidebar-nav li:hover > a i,
+    .sidebar-colored .sidebar-nav li > a:hover,
+    .sidebar-colored .sidebar-nav li > a:hover i,
+    .sidebar-colored .sidebar-nav li > a:focus i,
+    .sidebar-colored .sidebar-nav > .open > a,
+    .sidebar-colored .sidebar-nav > .open > a:hover,
+    .sidebar-colored .sidebar-nav > .open > a:focus,
+    #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+        color: #0097A7 !important;
+    }
+
+    .toTop {
+        background: #757575 !important;
+    }
+
+    .material-layout .material-post>.material-nav,
+    .material-layout .material-index>.material-nav,
+    .material-nav a {
+        color: #757575;
+    }
+
+    #scheme-Paradox .MD-burger-layer {
+        background-color: #757575;
+    }
+
+    #scheme-Paradox #post-toc-trigger-btn {
+        color: #757575;
+    }
+
+    .post-toc a:hover {
+        color: #00838F;
+        text-decoration: underline;
+    }
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+        body{
+            background-image: url(/img/bg3.png);
+        }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+        .fade {
+            transition: all 800ms linear;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+            -ms-transform: translate3d(0,0,0);
+            -o-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            opacity: 1;
+        }
+
+        .fade.out{
+            opacity: 0;
+        }
+    </style>
+
+
+    <script src="/js/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/css/highlight/solarized-white.css">
+
+    <!-- UC Browser Compatible-->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write('<link rel="stylesheet" href="/css/uc.css">');
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#瞎倒腾"><span class="post-toc-number">1.</span> <span class="post-toc-text">瞎倒腾</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#连接"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#dispatch-queue-set-specific"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">dispatch_queue_set_specific</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#连接过程"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">连接过程</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Source-Timer"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Source/Timer</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#连接-1"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#读写"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">读写</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#计时器"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">计时器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#source总结"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">source总结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#读"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#写"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">写</span></a></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').css('background-image', 'url(' + '/img/random/material-' + randomNum + '.png' + ')');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                So Terrible
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar3.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>纸简书生</strong>
+        <span>8月 01, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/think/">think</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=So Terrible&url=http://yoursite.com//2017/08/01/2017/8/瞎搞/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                分享到微博
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>很久没有写了。尤其是技术文章，一个多月没写了。本来这篇文章应该早一个月前写出来的。一直想把这篇我文章写好点，所以一直在看，在研究相关的问题。但是迟迟拖到现在也没完成。非常的遗憾，平时琐碎的时间太多。有时候觉得自己弄懂了就行了何必再去写东西呢！写一篇高质量的文章非常耗时，从写Demo到一步一步分析。😔还是没能完成最终的想法。就当给自己一个教训！<br><a id="more"></a></p>
+<h1 id="瞎倒腾"><a href="#瞎倒腾" class="headerlink" title="瞎倒腾"></a>瞎倒腾</h1><p>几大核心对象（Util）如下：</p>
+<ol>
+<li>GCDAsyncSocketPreBuffer：用于当socket有更多可用的数据请求的时候而不是被当前读请求使用。在这种情况下将会从socket中剔除所有数据来最小化系统调用。并且将其他尚未被读取的数据放如preBuffer中。再次从socket读取之前，会填满preBuffer，换句话说也就是大量的数据会被写入preBuffer。接下来通过一系列的一次或多次读取(后续的读取请求)排除preBuffer。之前为了实现这个目的，使用了ring Buffer，但是一个ringBuffer占用的存储是需要的两倍，实际上通常是需要两倍以上的大小，因为所有内容必须四舍五入到vm_page_size。因为preBuffer在写入之后总是完全耗尽，所以不需要完整ringBuffer。目前通过链表实现的</li>
+<li>GCDAsyncReadPacket：用于对可读数据包装，可读包可以确定是否读到了某个长度、短刀了么讴歌分隔符，捉着读到了第一个可用的chunk数据</li>
+<li>GCDAsyncWritePacket：用于对可写数据包装</li>
+<li>GCDAsyncSpecialPacket：对在读写队列中终端的特殊指令包装</li>
+<li>GCDAsyncSocket：最终向外部暴露的类，使用标准的代理模式。在所给的代理队列里面回调。允许设置最大并发，提供了简单的线程安全。</li>
+<li>Class Utilities：常用工具方法<ul>
+<li>根据域名得到ip地址数组：lookupHost:(NSString *)host port:(uint16_t)port error:</li>
+<li>是否为ipv4、ipv6</li>
+</ul>
+</li>
+</ol>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>连接最终调用如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)connectToHost:(NSString *)inHost</div><div class="line">               onPort:(uint16_t)port</div><div class="line">         viaInterface:(NSString *)inInterface</div><div class="line">          withTimeout:(NSTimeInterval)timeout</div><div class="line">                error:(NSError **)errPtr</div></pre></td></tr></table></figure>
+<p>各个参数的意思很清楚，这里说一下参数inInterface。代表的是网卡接口。常见的如下：</p>
+<ul>
+<li>en1（Wireless NIC）无线网卡</li>
+<li>lo0（本机环路），</li>
+<li>en0有线网卡 （Wired NIC）。</li>
+<li><p>注意：<strong>MBP 上没有有线网卡，en0 即为无线网卡</strong> ，可通过 ifconfig 命令自行识别。</p>
+<p>它的值可以是”en1” or “lo0”也可以是ip地址。并且可以包含一个端口，用冒号分开。如果interface有值，则后面会将本机的IPV4 IPV6的 address设置上。</p>
+<p>将参数传递进来之后立即将参数copy了一份保证不被外部修改。然后发起同步的链接。</p>
+</li>
+</ul>
+<h3 id="dispatch-queue-set-specific"><a href="#dispatch-queue-set-specific" class="headerlink" title="dispatch_queue_set_specific"></a>dispatch_queue_set_specific</h3><p> 因为连接过程是在特定的socket队列中完成，所以用了dispatch_queue_set_specific来实现。</p>
+<p> dispatch_queue_set_specific的使用方法比较简单，只要理解它就是为某个队列打个标记，然后通过这个标记取出来。可以简单的把他理解为一个字典。</p>
+<ul>
+<li>打标记：<code>dispatch_queue_set_specific(socketQueue, IsOnSocketQueueOrTargetQueueKey, nonNullUnusedPointer, NULL);</code></li>
+<li>根据标记取：<code>dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey)</code></li>
+</ul>
+<h3 id="连接过程"><a href="#连接过程" class="headerlink" title="连接过程"></a>连接过程</h3><p>连接过程的非常多。这里把整个过程简化了一下。</p>
+<p><strong>从开始连接到最终连接，最终调用走到<code>int result = connect(socketFD, (const struct sockaddr *)[address bytes], (socklen_t)[address length]);</code></strong></p>
+<p>注意一点连接的过程全部放在了自动释放池@autoreleasepool中。目的也是为了优化性能。</p>
+<p>在开始连接之前做了一个预处理。里面做了几个重要的事情：</p>
+<ol>
+<li>参数检验：代理是否为空、当前队列是否为socket队列、当前状态是否已经连接、清空读写队列</li>
+<li>状态更新：用flags |= kSocketStarted;方式更新状态标识为开始Socket连接</li>
+<li>域名解析(ipv4、ipv6)：返回的是一个数组</li>
+<li>开始去连接：在全局队列里面调用[strongSelf lookup:aStateIndex didSucceedWithAddress4:address4 address6:address6];</li>
+</ol>
+<p>开始连接的过程有如下几个函数：</p>
+<ul>
+<li><code>- (void)lookup:(int)aStateIndex didSucceedWithAddress4:(NSData *)address4 address6:(NSData *)address6</code><ul>
+<li>根据ip配置过滤，是否禁用ip4/6，报错则关闭连接。</li>
+</ul>
+</li>
+<li><code>- (BOOL)connectWithAddress4:(NSData *)address4 address6:(NSData *)address6 error:(NSError **)errPtr</code><ul>
+<li>获取具体的ipv4、ipv6地址。根据配置确定socketFD的值，socketFD为最终连接数据。</li>
+</ul>
+</li>
+<li><code>- (void)connectSocket:(int)socketFD address:(NSData *)address stateIndex:(int)aStateIndex</code><ul>
+<li>最终调用connect方法，将上面得到socketFD进行连接。注意这个方法是个同步的，会阻塞线程。<h2 id="Source-Timer"><a href="#Source-Timer" class="headerlink" title="Source/Timer"></a>Source/Timer</h2>如果了解过runloop底层的同学就知道source这个东西。项目中一共定义了如下几种source</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">dispatch_source_t accept4Source;</div><div class="line">	dispatch_source_t accept6Source;</div><div class="line">	dispatch_source_t acceptUNSource;</div><div class="line">    </div><div class="line">    //连接timer,GCD定时器</div><div class="line">	dispatch_source_t connectTimer;</div><div class="line">	dispatch_source_t readSource;</div><div class="line">	dispatch_source_t writeSource;</div><div class="line">	dispatch_source_t readTimer;</div><div class="line">	dispatch_source_t writeTimer;</div></pre></td></tr></table></figure>
+<p>基本上分为三种，一种是用于监听连接的accept类型，一种是读写read、write，一种是定时器source。通过这几种source，达到监听网络连接、读写进度、定时器计时。</p>
+<h3 id="连接-1"><a href="#连接-1" class="headerlink" title="连接"></a>连接</h3><p>通过代理来看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">    // 连接</div><div class="line">accept4Source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socket4FD, 0, socketQueue);</div><div class="line"></div><div class="line">int socketFD = socket4FD;</div><div class="line">dispatch_source_t acceptSource = accept4Source;</div><div class="line"></div><div class="line">__weak GCDAsyncSocket *weakSelf = self;</div><div class="line"></div><div class="line">         //事件句柄</div><div class="line">dispatch_source_set_event_handler(accept4Source, ^&#123; @autoreleasepool &#123;</div><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">	</div><div class="line">	__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">	if (strongSelf == nil) return_from_block;</div><div class="line">	</div><div class="line">	LogVerbose(@&quot;event4Block&quot;);</div><div class="line">	</div><div class="line">	unsigned long i = 0;</div><div class="line">             //拿到数据，连接数</div><div class="line">	unsigned long numPendingConnections = dispatch_source_get_data(acceptSource);</div><div class="line">	</div><div class="line">	LogVerbose(@&quot;numPendingConnections: %lu&quot;, numPendingConnections);</div><div class="line">	</div><div class="line">             //循环去接受这些socket的事件</div><div class="line">	while ([strongSelf doAccept:socketFD] &amp;&amp; (++i &lt; numPendingConnections));</div><div class="line">	</div><div class="line">#pragma clang diagnostic pop</div><div class="line">&#125;&#125;);</div><div class="line"></div><div class="line">//取消句柄</div><div class="line">dispatch_source_set_cancel_handler(accept4Source, ^&#123;</div><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">	</div><div class="line">	#if !OS_OBJECT_USE_OBJC</div><div class="line">	LogVerbose(@&quot;dispatch_release(accept4Source)&quot;);</div><div class="line">	dispatch_release(acceptSource);</div><div class="line">	#endif</div><div class="line">	</div><div class="line">	LogVerbose(@&quot;close(socket4FD)&quot;);</div><div class="line">             //关闭socket</div><div class="line">	close(socketFD);</div><div class="line"></div><div class="line">#pragma clang diagnostic pop</div><div class="line">&#125;);</div><div class="line"></div><div class="line">LogVerbose(@&quot;dispatch_resume(accept4Source)&quot;);</div><div class="line">         //开启source</div><div class="line">dispatch_resume(accept4Source);</div></pre></td></tr></table></figure>
+<p>一旦有网络连接连上就会调用dispatch_source_set_event_handler设置的block。当取消连接的时候就会走dispatch_source_set_cancel_handler的block。注意source不会自己启动，需要手动启动。一切的开始都是从这一步开始的。</p>
+<h3 id="读写"><a href="#读写" class="headerlink" title="读写"></a>读写</h3><p>读和写逻辑上基本一样，同样是开始创建事件源，设置监听回调、设置取消回调，手动启动几个步骤。具体步骤可以看看下面的注释。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line">//GCD source DISPATCH_SOURCE_TYPE_READ 会一直监视着 socketFD，直到有数据可读</div><div class="line">	readSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socketFD, 0, socketQueue);</div><div class="line">    //_dispatch_source_type_write ：监视着 socketFD，直到写数据了</div><div class="line">	writeSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE, socketFD, 0, socketQueue);</div><div class="line">	</div><div class="line">	// Setup event handlers</div><div class="line">	</div><div class="line">	__weak GCDAsyncSocket *weakSelf = self;</div><div class="line">    </div><div class="line">#pragma mark readSource的回调</div><div class="line"></div><div class="line">	//GCD事件句柄  读，当socket中有数据流出现，就会触发这个句柄，全自动，不需要手动触发</div><div class="line">	dispatch_source_set_event_handler(readSource, ^&#123; @autoreleasepool &#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">		if (strongSelf == nil) return_from_block;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;readEventBlock&quot;);</div><div class="line">		//从readSource中，获取到数据长度，</div><div class="line">		strongSelf-&gt;socketFDBytesAvailable = dispatch_source_get_data(strongSelf-&gt;readSource);</div><div class="line">		LogVerbose(@&quot;socketFDBytesAvailable: %lu&quot;, strongSelf-&gt;socketFDBytesAvailable);</div><div class="line">		</div><div class="line">        //如果长度大于0，开始读数据</div><div class="line">		if (strongSelf-&gt;socketFDBytesAvailable &gt; 0)</div><div class="line">			[strongSelf doReadData];</div><div class="line">		else</div><div class="line">            //因为触发了，但是却没有可读数据，说明读到当前包边界了。做边界处理</div><div class="line">			[strongSelf doReadEOF];</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;&#125;);</div><div class="line">	</div><div class="line">    //写事件句柄</div><div class="line">	dispatch_source_set_event_handler(writeSource, ^&#123; @autoreleasepool &#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">		if (strongSelf == nil) return_from_block;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;writeEventBlock&quot;);</div><div class="line">		//标记为可接受数据</div><div class="line">		strongSelf-&gt;flags |= kSocketCanAcceptBytes;</div><div class="line">        //开始写</div><div class="line">		[strongSelf doWriteData];</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;&#125;);</div><div class="line">	</div><div class="line">	// Setup cancel handlers</div><div class="line">	</div><div class="line">	__block int socketFDRefCount = 2;</div><div class="line">	</div><div class="line">	#if !OS_OBJECT_USE_OBJC</div><div class="line">	dispatch_source_t theReadSource = readSource;</div><div class="line">	dispatch_source_t theWriteSource = writeSource;</div><div class="line">	#endif</div><div class="line">	</div><div class="line">    //读写取消的句柄</div><div class="line">	dispatch_source_set_cancel_handler(readSource, ^&#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;readCancelBlock&quot;);</div><div class="line">		</div><div class="line">		#if !OS_OBJECT_USE_OBJC</div><div class="line">		LogVerbose(@&quot;dispatch_release(readSource)&quot;);</div><div class="line">		dispatch_release(theReadSource);</div><div class="line">		#endif</div><div class="line">		</div><div class="line">		if (--socketFDRefCount == 0)</div><div class="line">		&#123;</div><div class="line">			LogVerbose(@&quot;close(socketFD)&quot;);</div><div class="line">            //关闭socket</div><div class="line">			close(socketFD);</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;);</div><div class="line">	</div><div class="line">	dispatch_source_set_cancel_handler(writeSource, ^&#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;writeCancelBlock&quot;);</div><div class="line">		</div><div class="line">		#if !OS_OBJECT_USE_OBJC</div><div class="line">		LogVerbose(@&quot;dispatch_release(writeSource)&quot;);</div><div class="line">		dispatch_release(theWriteSource);</div><div class="line">		#endif</div><div class="line">		</div><div class="line">		if (--socketFDRefCount == 0)</div><div class="line">		&#123;</div><div class="line">			LogVerbose(@&quot;close(socketFD)&quot;);</div><div class="line">            //关闭socket</div><div class="line">			close(socketFD);</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;);</div></pre></td></tr></table></figure>
+<h3 id="计时器"><a href="#计时器" class="headerlink" title="计时器"></a>计时器</h3><p>计时器可以用NSTimer但是精度上没有source那么精确<br>这里以一个读超时计时器为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">//生成一个定时器source</div><div class="line">		readTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, socketQueue);</div><div class="line">		</div><div class="line">		__weak GCDAsyncSocket *weakSelf = self;</div><div class="line">		</div><div class="line">        //句柄</div><div class="line">		dispatch_source_set_event_handler(readTimer, ^&#123; @autoreleasepool &#123;</div><div class="line">		#pragma clang diagnostic push</div><div class="line">		#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">			</div><div class="line">			__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">			if (strongSelf == nil) return_from_block;</div><div class="line">			</div><div class="line">            //执行超时操作</div><div class="line">			[strongSelf doReadTimeout];</div><div class="line">			</div><div class="line">		#pragma clang diagnostic pop</div><div class="line">		&#125;&#125;);</div><div class="line">		</div><div class="line">		#if !OS_OBJECT_USE_OBJC</div><div class="line">		dispatch_source_t theReadTimer = readTimer;</div><div class="line">        </div><div class="line">        //取消的句柄</div><div class="line">		dispatch_source_set_cancel_handler(readTimer, ^&#123;</div><div class="line">		#pragma clang diagnostic push</div><div class="line">		#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">			</div><div class="line">			LogVerbose(@&quot;dispatch_release(readTimer)&quot;);</div><div class="line">			dispatch_release(theReadTimer);</div><div class="line">			</div><div class="line">		#pragma clang diagnostic pop</div><div class="line">		&#125;);</div><div class="line">		#endif</div><div class="line">		</div><div class="line">        //定时器延时 timeout时间执行</div><div class="line">		dispatch_time_t tt = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC));</div><div class="line">		//间隔为永远，即只执行一次</div><div class="line">		dispatch_source_set_timer(readTimer, tt, DISPATCH_TIME_FOREVER, 0);</div><div class="line">		dispatch_resume(readTimer);</div></pre></td></tr></table></figure>
+<h3 id="source总结"><a href="#source总结" class="headerlink" title="source总结"></a>source总结</h3><p>通过上面的代码可以得出source的使用方式，而且整个GCDAsyncSocket都是建立在这个基础之上。设置各个source的回调处理方法。在事件到来的时候调用。如果手动取消则会调用cancle回调。基本上是照着葫芦画瓢的过程。</p>
+<h2 id="读"><a href="#读" class="headerlink" title="读"></a>读</h2><p>读和写的过程和逻辑判断步骤基本相似的。</p>
+<h2 id="写"><a href="#写" class="headerlink" title="写"></a>写</h2><p>往socket里面写数据调用<code>writeData: withTimeout: tag:</code></p>
+<p>发送之前先将数据包装成GCDAsyncWritePacket对象。将packet加入到writeQueue当中，然后调用doWriteData方法。最终调用<code>ssize_t result = write(socketFD, buffer, (size_t)bytesToWrite);</code>中间经过一系列的条件判断。</p>
+<ol>
+<li><code>- (void)writeData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag</code></li>
+<li><code>[self maybeDequeueWrite];</code> 一系列条件判断，比如TLS,SSL。超时设置</li>
+<li><code>[self doWriteData];</code></li>
+<li>Writing data directly over raw socket。</li>
+</ol>
+<p>注意ssize_t write(int fd, const void*buf,size_t nbytes);write函数将buf中的nbytes字节内容写入文件描述符fd.成功时返回写的字节数.失败时返回-1. 并设置errno变量。</p>
+<p>在写的时候可能一次写不完全，所以需要GCDAsyncWritePacket记录当前的已经上传多少。</p>
+<blockquote>
+<p>给自己截止的日期已经到了，但是还是没有整理出来。</p>
+</blockquote>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/06/07/2017/6/如何阅读开源项目/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            新篇
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar3.png" alt="纸简书生's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        weslywxl@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    <li id="sidebar-first-li">
+        <a href="/" target="_self">
+            <i class="material-icons sidebar-material-icons">home</i>
+            主页
+        </a>
+    </li>
+
+    <!-- I'm Feeling Lucky -->
+    <!--
+    <li class="dropdown">
+        <a href="" target="_self">
+            <i class="material-icons sidebar-material-icons">explore</i>
+             sidebar.imlucky
+        </a>
+    </li>
+    -->
+
+    <!-- Archives  -->
+    <li class="dropdown">
+        <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+            <i class="material-icons sidebar-material-icons">inbox</i>
+             归档
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+            <a class="sidebar_archives-link" href="/archives/2017/08/">八月 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">六月 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">五月 2017<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">四月 2017<span class="sidebar_archives-count">12</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">三月 2017<span class="sidebar_archives-count">1</span></a>
+        </ul>
+    </li>
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                分类
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Android/">Android<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Blog/">Blog<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Recover/">Recover<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/base/">base<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/">iOS<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/animation/">animation<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/audio/">audio<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/base/">base<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/face-recognize/">face recognize<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/issue/">issue<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/iOS/recover/">recover<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/language/">language<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/language/base/">base<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/mac/">mac<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/mac/tool/">tool<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/sourcecode/">sourcecode<span class="sidebar_archives-count">1</span></a>
+            </ul>
+        </li>
+    
+
+    <!-- Divider -->
+    <li class="divider"></li>
+
+
+    <!-- Pages  -->
+  	
+
+    <!-- Article Numebr  -->
+    <li>
+        <a href="/archives">
+            文章总数
+            <span class="sidebar-badge">17</span>
+        </a>
+    </li>
+</ul>
+
+
+        <!-- Sidebar Divider -->
+        <div class="sidebar-divider"></div>
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Theme Material -->
+<a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        主题 - Material
+        <span class="sidebar-badge badge-circle">i</span>
+    </div>
+</a>
+
+<!-- Help & Support -->
+<!--
+<a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+    sidebar.help
+    <span class="mdl-button__ripple-container">
+      <span class="mdl-ripple"></span>
+    </span>
+  </div>
+</a>
+-->
+
+<!-- Feedback -->
+<!--
+<a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.feedback
+                    <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>
+-->
+
+<!-- Abount Theme -->
+<!--
+<a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+    <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+         sidebar.about_theme
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+</a>-->
+
+    </div>
+
+    <!-- Sidebar Sponsor -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;纸简书生
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+<script src="/js/highlight.min.js"></script>
+<script src="/js/js.min.js"></script>
+<script src="/js/nprogress.js"></script>
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+
+    $('#nprogress .bar').css({
+        'background': '#FF4081'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #FF4081, 0 0 15px #FF4081'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#FF4081',
+        'border-left-color': '#FF4081'
+    });
+
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    <script src="/js/smoothscroll.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Swiftye -->
+
+
+<!-- Local Search-->
+
+    <script>
+    var searchFunc = function(path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: 'xml',
+            success: function( xmlResponse ) {
+                // get the contents from search data
+                var datas = $( 'entry', xmlResponse ).map(function() {
+                    return {
+                        title: $( 'title', this ).text(),
+                        content: $('content',this).text(),
+                        url: $( 'url' , this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function() {
+                    var str='<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function(data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                        var data_url = data.url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if(data_title != '' && data_content != '') {
+                            keywords.forEach(function(keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if( index_title < 0 && index_content < 0 ) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += '<li><a href="'+ data_url +'" class="search-result-title" target="_blank">'+ data_title;
+                            var content = data.content.trim().replace(/<[^>]+>/g, '');
+                            if (first_occur >= 0) {
+                                // cut out characters
+                                var start = first_occur - 6;
+                                var end = first_occur + 6;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 10;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function(keyword) {
+                                    var regS = new RegExp(keyword, 'gi');
+                                    match_content = match_content.replace(regS, '<em class="search-keyword">'+keyword+'</em>');
+                                })
+                                str += '<p class="search-result">' + match_content +'...</p>' +'</a>';
+                            }
+                        }
+                    });
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    }
+</script>
+
+
+    <script>
+        var inputArea = document.querySelector('#search');
+        var getSearchFile = function() {
+            var path = 'search.xml';
+            searchFunc(path, 'search', 'local-search-result');
+        }
+
+        if(inputArea) {
+            inputArea.onfocus = function() {
+                getSearchFile();
+            }
+        }
+    </script>
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+
+                </main>
+            </div>
+        </body>
+    
+</html>

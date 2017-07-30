@@ -4,6 +4,107 @@
   
     
     <entry>
+      <title><![CDATA[So Terrible]]></title>
+      <url>http://yoursite.com/2017/08/01/2017/8/%E7%9E%8E%E6%90%9E/</url>
+      <content type="html"><![CDATA[<p>很久没有写了。尤其是技术文章，一个多月没写了。本来这篇文章应该早一个月前写出来的。一直想把这篇我文章写好点，所以一直在看，在研究相关的问题。但是迟迟拖到现在也没完成。非常的遗憾，平时琐碎的时间太多。有时候觉得自己弄懂了就行了何必再去写东西呢！写一篇高质量的文章非常耗时，从写Demo到一步一步分析。😔还是没能完成最终的想法。就当给自己一个教训！<br><a id="more"></a></p>
+<h1 id="瞎倒腾"><a href="#瞎倒腾" class="headerlink" title="瞎倒腾"></a>瞎倒腾</h1><p>几大核心对象（Util）如下：</p>
+<ol>
+<li>GCDAsyncSocketPreBuffer：用于当socket有更多可用的数据请求的时候而不是被当前读请求使用。在这种情况下将会从socket中剔除所有数据来最小化系统调用。并且将其他尚未被读取的数据放如preBuffer中。再次从socket读取之前，会填满preBuffer，换句话说也就是大量的数据会被写入preBuffer。接下来通过一系列的一次或多次读取(后续的读取请求)排除preBuffer。之前为了实现这个目的，使用了ring Buffer，但是一个ringBuffer占用的存储是需要的两倍，实际上通常是需要两倍以上的大小，因为所有内容必须四舍五入到vm_page_size。因为preBuffer在写入之后总是完全耗尽，所以不需要完整ringBuffer。目前通过链表实现的</li>
+<li>GCDAsyncReadPacket：用于对可读数据包装，可读包可以确定是否读到了某个长度、短刀了么讴歌分隔符，捉着读到了第一个可用的chunk数据</li>
+<li>GCDAsyncWritePacket：用于对可写数据包装</li>
+<li>GCDAsyncSpecialPacket：对在读写队列中终端的特殊指令包装</li>
+<li>GCDAsyncSocket：最终向外部暴露的类，使用标准的代理模式。在所给的代理队列里面回调。允许设置最大并发，提供了简单的线程安全。</li>
+<li>Class Utilities：常用工具方法<ul>
+<li>根据域名得到ip地址数组：lookupHost:(NSString *)host port:(uint16_t)port error:</li>
+<li>是否为ipv4、ipv6</li>
+</ul>
+</li>
+</ol>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>连接最终调用如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)connectToHost:(NSString *)inHost</div><div class="line">               onPort:(uint16_t)port</div><div class="line">         viaInterface:(NSString *)inInterface</div><div class="line">          withTimeout:(NSTimeInterval)timeout</div><div class="line">                error:(NSError **)errPtr</div></pre></td></tr></table></figure>
+<p>各个参数的意思很清楚，这里说一下参数inInterface。代表的是网卡接口。常见的如下：</p>
+<ul>
+<li>en1（Wireless NIC）无线网卡</li>
+<li>lo0（本机环路），</li>
+<li>en0有线网卡 （Wired NIC）。</li>
+<li><p>注意：<strong>MBP 上没有有线网卡，en0 即为无线网卡</strong> ，可通过 ifconfig 命令自行识别。</p>
+<p>它的值可以是”en1” or “lo0”也可以是ip地址。并且可以包含一个端口，用冒号分开。如果interface有值，则后面会将本机的IPV4 IPV6的 address设置上。</p>
+<p>将参数传递进来之后立即将参数copy了一份保证不被外部修改。然后发起同步的链接。</p>
+</li>
+</ul>
+<h3 id="dispatch-queue-set-specific"><a href="#dispatch-queue-set-specific" class="headerlink" title="dispatch_queue_set_specific"></a>dispatch_queue_set_specific</h3><p> 因为连接过程是在特定的socket队列中完成，所以用了dispatch_queue_set_specific来实现。</p>
+<p> dispatch_queue_set_specific的使用方法比较简单，只要理解它就是为某个队列打个标记，然后通过这个标记取出来。可以简单的把他理解为一个字典。</p>
+<ul>
+<li>打标记：<code>dispatch_queue_set_specific(socketQueue, IsOnSocketQueueOrTargetQueueKey, nonNullUnusedPointer, NULL);</code></li>
+<li>根据标记取：<code>dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey)</code></li>
+</ul>
+<h3 id="连接过程"><a href="#连接过程" class="headerlink" title="连接过程"></a>连接过程</h3><p>连接过程的非常多。这里把整个过程简化了一下。</p>
+<p><strong>从开始连接到最终连接，最终调用走到<code>int result = connect(socketFD, (const struct sockaddr *)[address bytes], (socklen_t)[address length]);</code></strong></p>
+<p>注意一点连接的过程全部放在了自动释放池@autoreleasepool中。目的也是为了优化性能。</p>
+<p>在开始连接之前做了一个预处理。里面做了几个重要的事情：</p>
+<ol>
+<li>参数检验：代理是否为空、当前队列是否为socket队列、当前状态是否已经连接、清空读写队列</li>
+<li>状态更新：用flags |= kSocketStarted;方式更新状态标识为开始Socket连接</li>
+<li>域名解析(ipv4、ipv6)：返回的是一个数组</li>
+<li>开始去连接：在全局队列里面调用[strongSelf lookup:aStateIndex didSucceedWithAddress4:address4 address6:address6];</li>
+</ol>
+<p>开始连接的过程有如下几个函数：</p>
+<ul>
+<li><code>- (void)lookup:(int)aStateIndex didSucceedWithAddress4:(NSData *)address4 address6:(NSData *)address6</code><ul>
+<li>根据ip配置过滤，是否禁用ip4/6，报错则关闭连接。</li>
+</ul>
+</li>
+<li><code>- (BOOL)connectWithAddress4:(NSData *)address4 address6:(NSData *)address6 error:(NSError **)errPtr</code><ul>
+<li>获取具体的ipv4、ipv6地址。根据配置确定socketFD的值，socketFD为最终连接数据。</li>
+</ul>
+</li>
+<li><code>- (void)connectSocket:(int)socketFD address:(NSData *)address stateIndex:(int)aStateIndex</code><ul>
+<li>最终调用connect方法，将上面得到socketFD进行连接。注意这个方法是个同步的，会阻塞线程。<h2 id="Source-Timer"><a href="#Source-Timer" class="headerlink" title="Source/Timer"></a>Source/Timer</h2>如果了解过runloop底层的同学就知道source这个东西。项目中一共定义了如下几种source</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">dispatch_source_t accept4Source;</div><div class="line">	dispatch_source_t accept6Source;</div><div class="line">	dispatch_source_t acceptUNSource;</div><div class="line">    </div><div class="line">    //连接timer,GCD定时器</div><div class="line">	dispatch_source_t connectTimer;</div><div class="line">	dispatch_source_t readSource;</div><div class="line">	dispatch_source_t writeSource;</div><div class="line">	dispatch_source_t readTimer;</div><div class="line">	dispatch_source_t writeTimer;</div></pre></td></tr></table></figure>
+<p>基本上分为三种，一种是用于监听连接的accept类型，一种是读写read、write，一种是定时器source。通过这几种source，达到监听网络连接、读写进度、定时器计时。</p>
+<h3 id="连接-1"><a href="#连接-1" class="headerlink" title="连接"></a>连接</h3><p>通过代理来看看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">    // 连接</div><div class="line">accept4Source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socket4FD, 0, socketQueue);</div><div class="line"></div><div class="line">int socketFD = socket4FD;</div><div class="line">dispatch_source_t acceptSource = accept4Source;</div><div class="line"></div><div class="line">__weak GCDAsyncSocket *weakSelf = self;</div><div class="line"></div><div class="line">         //事件句柄</div><div class="line">dispatch_source_set_event_handler(accept4Source, ^&#123; @autoreleasepool &#123;</div><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">	</div><div class="line">	__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">	if (strongSelf == nil) return_from_block;</div><div class="line">	</div><div class="line">	LogVerbose(@&quot;event4Block&quot;);</div><div class="line">	</div><div class="line">	unsigned long i = 0;</div><div class="line">             //拿到数据，连接数</div><div class="line">	unsigned long numPendingConnections = dispatch_source_get_data(acceptSource);</div><div class="line">	</div><div class="line">	LogVerbose(@&quot;numPendingConnections: %lu&quot;, numPendingConnections);</div><div class="line">	</div><div class="line">             //循环去接受这些socket的事件</div><div class="line">	while ([strongSelf doAccept:socketFD] &amp;&amp; (++i &lt; numPendingConnections));</div><div class="line">	</div><div class="line">#pragma clang diagnostic pop</div><div class="line">&#125;&#125;);</div><div class="line"></div><div class="line">//取消句柄</div><div class="line">dispatch_source_set_cancel_handler(accept4Source, ^&#123;</div><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">	</div><div class="line">	#if !OS_OBJECT_USE_OBJC</div><div class="line">	LogVerbose(@&quot;dispatch_release(accept4Source)&quot;);</div><div class="line">	dispatch_release(acceptSource);</div><div class="line">	#endif</div><div class="line">	</div><div class="line">	LogVerbose(@&quot;close(socket4FD)&quot;);</div><div class="line">             //关闭socket</div><div class="line">	close(socketFD);</div><div class="line"></div><div class="line">#pragma clang diagnostic pop</div><div class="line">&#125;);</div><div class="line"></div><div class="line">LogVerbose(@&quot;dispatch_resume(accept4Source)&quot;);</div><div class="line">         //开启source</div><div class="line">dispatch_resume(accept4Source);</div></pre></td></tr></table></figure>
+<p>一旦有网络连接连上就会调用dispatch_source_set_event_handler设置的block。当取消连接的时候就会走dispatch_source_set_cancel_handler的block。注意source不会自己启动，需要手动启动。一切的开始都是从这一步开始的。</p>
+<h3 id="读写"><a href="#读写" class="headerlink" title="读写"></a>读写</h3><p>读和写逻辑上基本一样，同样是开始创建事件源，设置监听回调、设置取消回调，手动启动几个步骤。具体步骤可以看看下面的注释。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line">//GCD source DISPATCH_SOURCE_TYPE_READ 会一直监视着 socketFD，直到有数据可读</div><div class="line">	readSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socketFD, 0, socketQueue);</div><div class="line">    //_dispatch_source_type_write ：监视着 socketFD，直到写数据了</div><div class="line">	writeSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE, socketFD, 0, socketQueue);</div><div class="line">	</div><div class="line">	// Setup event handlers</div><div class="line">	</div><div class="line">	__weak GCDAsyncSocket *weakSelf = self;</div><div class="line">    </div><div class="line">#pragma mark readSource的回调</div><div class="line"></div><div class="line">	//GCD事件句柄  读，当socket中有数据流出现，就会触发这个句柄，全自动，不需要手动触发</div><div class="line">	dispatch_source_set_event_handler(readSource, ^&#123; @autoreleasepool &#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">		if (strongSelf == nil) return_from_block;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;readEventBlock&quot;);</div><div class="line">		//从readSource中，获取到数据长度，</div><div class="line">		strongSelf-&gt;socketFDBytesAvailable = dispatch_source_get_data(strongSelf-&gt;readSource);</div><div class="line">		LogVerbose(@&quot;socketFDBytesAvailable: %lu&quot;, strongSelf-&gt;socketFDBytesAvailable);</div><div class="line">		</div><div class="line">        //如果长度大于0，开始读数据</div><div class="line">		if (strongSelf-&gt;socketFDBytesAvailable &gt; 0)</div><div class="line">			[strongSelf doReadData];</div><div class="line">		else</div><div class="line">            //因为触发了，但是却没有可读数据，说明读到当前包边界了。做边界处理</div><div class="line">			[strongSelf doReadEOF];</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;&#125;);</div><div class="line">	</div><div class="line">    //写事件句柄</div><div class="line">	dispatch_source_set_event_handler(writeSource, ^&#123; @autoreleasepool &#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">		if (strongSelf == nil) return_from_block;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;writeEventBlock&quot;);</div><div class="line">		//标记为可接受数据</div><div class="line">		strongSelf-&gt;flags |= kSocketCanAcceptBytes;</div><div class="line">        //开始写</div><div class="line">		[strongSelf doWriteData];</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;&#125;);</div><div class="line">	</div><div class="line">	// Setup cancel handlers</div><div class="line">	</div><div class="line">	__block int socketFDRefCount = 2;</div><div class="line">	</div><div class="line">	#if !OS_OBJECT_USE_OBJC</div><div class="line">	dispatch_source_t theReadSource = readSource;</div><div class="line">	dispatch_source_t theWriteSource = writeSource;</div><div class="line">	#endif</div><div class="line">	</div><div class="line">    //读写取消的句柄</div><div class="line">	dispatch_source_set_cancel_handler(readSource, ^&#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;readCancelBlock&quot;);</div><div class="line">		</div><div class="line">		#if !OS_OBJECT_USE_OBJC</div><div class="line">		LogVerbose(@&quot;dispatch_release(readSource)&quot;);</div><div class="line">		dispatch_release(theReadSource);</div><div class="line">		#endif</div><div class="line">		</div><div class="line">		if (--socketFDRefCount == 0)</div><div class="line">		&#123;</div><div class="line">			LogVerbose(@&quot;close(socketFD)&quot;);</div><div class="line">            //关闭socket</div><div class="line">			close(socketFD);</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;);</div><div class="line">	</div><div class="line">	dispatch_source_set_cancel_handler(writeSource, ^&#123;</div><div class="line">	#pragma clang diagnostic push</div><div class="line">	#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">		</div><div class="line">		LogVerbose(@&quot;writeCancelBlock&quot;);</div><div class="line">		</div><div class="line">		#if !OS_OBJECT_USE_OBJC</div><div class="line">		LogVerbose(@&quot;dispatch_release(writeSource)&quot;);</div><div class="line">		dispatch_release(theWriteSource);</div><div class="line">		#endif</div><div class="line">		</div><div class="line">		if (--socketFDRefCount == 0)</div><div class="line">		&#123;</div><div class="line">			LogVerbose(@&quot;close(socketFD)&quot;);</div><div class="line">            //关闭socket</div><div class="line">			close(socketFD);</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	#pragma clang diagnostic pop</div><div class="line">	&#125;);</div></pre></td></tr></table></figure>
+<h3 id="计时器"><a href="#计时器" class="headerlink" title="计时器"></a>计时器</h3><p>计时器可以用NSTimer但是精度上没有source那么精确<br>这里以一个读超时计时器为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">//生成一个定时器source</div><div class="line">		readTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, socketQueue);</div><div class="line">		</div><div class="line">		__weak GCDAsyncSocket *weakSelf = self;</div><div class="line">		</div><div class="line">        //句柄</div><div class="line">		dispatch_source_set_event_handler(readTimer, ^&#123; @autoreleasepool &#123;</div><div class="line">		#pragma clang diagnostic push</div><div class="line">		#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">			</div><div class="line">			__strong GCDAsyncSocket *strongSelf = weakSelf;</div><div class="line">			if (strongSelf == nil) return_from_block;</div><div class="line">			</div><div class="line">            //执行超时操作</div><div class="line">			[strongSelf doReadTimeout];</div><div class="line">			</div><div class="line">		#pragma clang diagnostic pop</div><div class="line">		&#125;&#125;);</div><div class="line">		</div><div class="line">		#if !OS_OBJECT_USE_OBJC</div><div class="line">		dispatch_source_t theReadTimer = readTimer;</div><div class="line">        </div><div class="line">        //取消的句柄</div><div class="line">		dispatch_source_set_cancel_handler(readTimer, ^&#123;</div><div class="line">		#pragma clang diagnostic push</div><div class="line">		#pragma clang diagnostic warning &quot;-Wimplicit-retain-self&quot;</div><div class="line">			</div><div class="line">			LogVerbose(@&quot;dispatch_release(readTimer)&quot;);</div><div class="line">			dispatch_release(theReadTimer);</div><div class="line">			</div><div class="line">		#pragma clang diagnostic pop</div><div class="line">		&#125;);</div><div class="line">		#endif</div><div class="line">		</div><div class="line">        //定时器延时 timeout时间执行</div><div class="line">		dispatch_time_t tt = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC));</div><div class="line">		//间隔为永远，即只执行一次</div><div class="line">		dispatch_source_set_timer(readTimer, tt, DISPATCH_TIME_FOREVER, 0);</div><div class="line">		dispatch_resume(readTimer);</div></pre></td></tr></table></figure>
+<h3 id="source总结"><a href="#source总结" class="headerlink" title="source总结"></a>source总结</h3><p>通过上面的代码可以得出source的使用方式，而且整个GCDAsyncSocket都是建立在这个基础之上。设置各个source的回调处理方法。在事件到来的时候调用。如果手动取消则会调用cancle回调。基本上是照着葫芦画瓢的过程。</p>
+<h2 id="读"><a href="#读" class="headerlink" title="读"></a>读</h2><p>读和写的过程和逻辑判断步骤基本相似的。</p>
+<h2 id="写"><a href="#写" class="headerlink" title="写"></a>写</h2><p>往socket里面写数据调用<code>writeData: withTimeout: tag:</code></p>
+<p>发送之前先将数据包装成GCDAsyncWritePacket对象。将packet加入到writeQueue当中，然后调用doWriteData方法。最终调用<code>ssize_t result = write(socketFD, buffer, (size_t)bytesToWrite);</code>中间经过一系列的条件判断。</p>
+<ol>
+<li><code>- (void)writeData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag</code></li>
+<li><code>[self maybeDequeueWrite];</code> 一系列条件判断，比如TLS,SSL。超时设置</li>
+<li><code>[self doWriteData];</code></li>
+<li>Writing data directly over raw socket。</li>
+</ol>
+<p>注意ssize_t write(int fd, const void*buf,size_t nbytes);write函数将buf中的nbytes字节内容写入文件描述符fd.成功时返回写的字节数.失败时返回-1. 并设置errno变量。</p>
+<p>在写的时候可能一次写不完全，所以需要GCDAsyncWritePacket记录当前的已经上传多少。</p>
+<blockquote>
+<p>给自己截止的日期已经到了，但是还是没有整理出来。</p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> sourcecode </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> think </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[如何阅读开源项目]]></title>
       <url>http://yoursite.com/2017/06/07/2017/6/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/</url>
       <content type="html"><![CDATA[<p>最近这段时间一直比较忙，相对于之前少了很多的学习时间。抽空看几篇源码分析的文章，大多数都是大同小异的思路，把英文翻译为中文而已。鉴于关于介绍如何阅读开源项目的文章比较稀少，常言道<strong>授人予鱼不如授人予渔</strong>。希望这篇文章能够给准备阅读三方源码的同学一些启示。<br><a id="more"></a></p>
@@ -822,31 +923,6 @@ Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Sp
     </entry>
     
     <entry>
-      <title><![CDATA[最近遇到的问题]]></title>
-      <url>http://yoursite.com/2017/04/05/2017/4/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-      <content type="html"><![CDATA[<p>记录一下最近遇到的问题。<br><a id="more"></a></p>
-<h1 id="libpng-error-CgBI-unhandled-critical-chunk"><a href="#libpng-error-CgBI-unhandled-critical-chunk" class="headerlink" title="libpng error: CgBI: unhandled critical chunk"></a>libpng error: CgBI: unhandled critical chunk</h1><p>这个错是出现在Xcode7.3之后。解决办法：在buildsetting里面，将<code>Remove Text Metadata From PNG Files</code>的值改为<code>NO</code>。默认值为YES.</p>
-<p>因为Xcode7.3之后，默认会将元数据从png格式的文件中移除。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> iOS </category>
-            
-            <category> issue </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> png </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[typeof、 __typeof 、及__typeof __的区别]]></title>
       <url>http://yoursite.com/2017/04/05/2017/4/typeof%E5%90%84%E4%B8%AA%E4%B8%8D%E5%90%8C/</url>
       <content type="html"><![CDATA[<p>这个问题是一个同事在看一些第三方源码的时候产生的疑惑，顺便就问了我。<br><a id="more"></a></p>
@@ -870,6 +946,31 @@ Spotlight server is disabled.</code>则进行下面的操作。<br> 1.1 开启Sp
         <tags>
             
             <tag> compiler </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[最近遇到的问题]]></title>
+      <url>http://yoursite.com/2017/04/05/2017/4/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+      <content type="html"><![CDATA[<p>记录一下最近遇到的问题。<br><a id="more"></a></p>
+<h1 id="libpng-error-CgBI-unhandled-critical-chunk"><a href="#libpng-error-CgBI-unhandled-critical-chunk" class="headerlink" title="libpng error: CgBI: unhandled critical chunk"></a>libpng error: CgBI: unhandled critical chunk</h1><p>这个错是出现在Xcode7.3之后。解决办法：在buildsetting里面，将<code>Remove Text Metadata From PNG Files</code>的值改为<code>NO</code>。默认值为YES.</p>
+<p>因为Xcode7.3之后，默认会将元数据从png格式的文件中移除。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> iOS </category>
+            
+            <category> issue </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> png </tag>
             
         </tags>
         
